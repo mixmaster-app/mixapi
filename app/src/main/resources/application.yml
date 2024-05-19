@@ -1,0 +1,28 @@
+# Main
+spring:
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/mixmaster?serverTimezone=UTC
+    username: mixmaster
+    password: mixmaster
+  jpa:
+    hibernate.ddl-auto: validate # none / validate / update / create-drop
+    open-in-view: false
+  profiles:
+    active: local
+  output:
+    ansi:
+      enabled: ALWAYS
+
+# Default API config
+server:
+  port: 8080
+  address: 0.0.0.0
+  servlet:
+    context-path: /api
+
+# Swagger
+springdoc:
+  swagger-ui:
+    path: /swagger
+  api-docs:
+    path: /swagger.json
