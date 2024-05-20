@@ -26,4 +26,13 @@ mvn spring-boot:run
 mvn test
 ```
 
+## Docker
+
+To build the docker image and then launch it we use the following commands
+
+```shell
+docker build -t kiiow/mixapi:latest .
+docker run -p 0.0.0.0:3000:3000/tcp kiiow/mixapi:latest
+```
+
 [mixmaster-data-respository]: https://github.com/mixmaster-app/mixmaster-data
