@@ -14,7 +14,7 @@ All the configuration of the application is present in `./app/srv/main/resources
 
 2. Run the application
 
-To execute the application you need to have `Java 21.x` and `maven` installed on your computer.\
+To execute the application you need to have `Java 21.x` and `maven` installed on your computer.
 
 ```shell
 mvn spring-boot:run

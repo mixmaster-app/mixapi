@@ -1,15 +1,11 @@
 package fr.kiiow.mixapi.models.Hench;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import fr.kiiow.mixapi.models.World.Zone;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.JoinColumnOrFormula;
-import org.hibernate.annotations.JoinColumnsOrFormulas;
-import org.hibernate.annotations.JoinFormula;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -36,7 +32,7 @@ public class Hench {
 
     @Column(name = "maximum_level")
     @JsonProperty(value = "maximum_level")
-    private Integer maxiumLevel;
+    private Integer maximumLevel;
 
     @Column(name = "atk_type", columnDefinition = "TINYINT")
     @JsonProperty(value = "atk_type")

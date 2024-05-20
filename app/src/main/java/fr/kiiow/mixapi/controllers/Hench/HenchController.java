@@ -2,7 +2,6 @@ package fr.kiiow.mixapi.controllers.Hench;
 
 import fr.kiiow.mixapi.controllers.AbstractController;
 import fr.kiiow.mixapi.models.Hench.Hench;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,8 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@Tag(name = "Hench", description = "Find information about Hench's")
-public class HenchController extends AbstractController {
+public class HenchController extends AbstractController implements IHenchController {
 
     @GetMapping(path = "/henchs")
     public List<Hench> findAllHenchs() {
