@@ -1,12 +1,14 @@
 # Main
 spring:
   datasource:
+    hikari:
+      connectionTimeout: 20000
+      maximumPoolSize: 5
     url: jdbc:mysql://127.0.0.1:3306/mixmaster?serverTimezone=UTC
     username: mixmaster
     password: mixmaster
   jpa:
     hibernate.ddl-auto: validate # none / validate / update / create-drop
-    open-in-view: false
   data:
     rest:
       detection-strategy: annotated

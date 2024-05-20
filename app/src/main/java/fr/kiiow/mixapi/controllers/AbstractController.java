@@ -18,7 +18,7 @@ public abstract class AbstractController extends ErrorResponseController {
         return this.daoManager;
     }
 
-    protected ResponseEntity<?> resultOk(Object response) {
-        return new ResponseEntity<>(response, HttpStatus.OK);
+    protected <T> ResponseEntity<T> resultOk(T response) {
+        return new ResponseEntity<T>(response, HttpStatus.OK);
     }
 }
