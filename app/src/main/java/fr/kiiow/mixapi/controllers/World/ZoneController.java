@@ -12,7 +12,7 @@ import java.util.List;
 @Tag(name = "World", description = "Mixmaster worlds data")
 public class ZoneController extends AbstractController {
 
-    @GetMapping("/zones")
+    @GetMapping(path = "/zones")
     public List<Zone> findAllZones() {
         return (List<Zone>) getDaoManager().getZoneDao().findAll();
     }
