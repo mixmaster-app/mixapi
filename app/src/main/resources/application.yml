@@ -7,6 +7,9 @@ spring:
   jpa:
     hibernate.ddl-auto: validate # none / validate / update / create-drop
     open-in-view: false
+  data:
+    rest:
+      detection-strategy: annotated
   profiles:
     active: local
   output:
