@@ -57,7 +57,7 @@ public class Hench {
     @JoinColumn(name = "type_id")
     private HenchType type;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany
     @JoinTable(
             name = "hench_zone",
             joinColumns = @JoinColumn(name = "hench_id"),
