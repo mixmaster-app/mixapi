@@ -1,5 +1,9 @@
 # Main
 spring:
+  application:
+    name: mixapi
+  jmx:
+    enabled: true
   datasource:
     hikari:
       connectionTimeout: 20000
@@ -31,3 +35,24 @@ springdoc:
     path: /swagger
   api-docs:
     path: /swagger.json
+
+# Metrics
+management:
+  endpoints:
+    jmx:
+      exposure:
+        include: '*'
+    web:
+      base-path: /metrics
+      exposure:
+        include: '*'
+        exclude: beans
+  info:
+    env:
+      enabled: true
+
+info:
+  app:
+    name: ${spring.application.name}
+    links:
+      github: https://github.com/mixmaster-app/mixapi

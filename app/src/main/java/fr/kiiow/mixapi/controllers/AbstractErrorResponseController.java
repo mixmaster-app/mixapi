@@ -3,7 +3,7 @@ package fr.kiiow.mixapi.controllers;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-public class ErrorResponseController {
+abstract class AbstractErrorResponseController {
 
     // 4xx Client Error
     public <T> ResponseEntity<T> _400_Bad_Request(T result) {

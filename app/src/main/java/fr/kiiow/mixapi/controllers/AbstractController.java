@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-public abstract class AbstractController extends ErrorResponseController {
+public abstract class AbstractController extends AbstractErrorResponseController {
 
     protected final Logger log = LogManager.getLogger();
 
