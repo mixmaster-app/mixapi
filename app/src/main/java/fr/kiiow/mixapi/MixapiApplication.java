@@ -12,9 +12,6 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication
 public class MixapiApplication {
 
-	@Value("classpath:")
-	private String version;
-
 	public static void main(String[] args) {
 		SpringApplication.run(MixapiApplication.class, args);
 	}
