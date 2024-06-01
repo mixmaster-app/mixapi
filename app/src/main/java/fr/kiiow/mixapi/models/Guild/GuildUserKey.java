@@ -17,4 +17,14 @@ public class GuildUserKey implements Serializable {
 
     @Column(name = "user_id")
     private Integer userId;
+
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }

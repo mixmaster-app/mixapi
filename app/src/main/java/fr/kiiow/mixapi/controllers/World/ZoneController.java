@@ -11,7 +11,7 @@ import java.util.List;
 public class ZoneController extends AbstractController implements IWorldController {
 
     @GetMapping(path = "/zones")
-    public List<Zone> findAllZones() {
+    public List<Zone> findAll() {
         return (List<Zone>) getDaoManager().getZoneDao().findAll();
     }
 }

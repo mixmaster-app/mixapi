@@ -1,6 +1,8 @@
 package fr.kiiow.mixapi.models.Guild;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,6 +23,7 @@ public class Guild {
     private String name;
 
     @OneToMany(mappedBy = "guild")
-    @JsonManagedReference
+    @JsonProperty(value = "users")
+    @JsonIgnoreProperties({"guild"})
     private List<GuildUser> users;
 }

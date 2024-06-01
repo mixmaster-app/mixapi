@@ -1,6 +1,9 @@
 package fr.kiiow.mixapi.models.Guild;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import fr.kiiow.mixapi.models.User.User;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -13,19 +16,24 @@ import lombok.Setter;
 public class GuildUser {
 
     @EmbeddedId
+    @JsonIgnore
     private GuildUserKey id;
 
     @ManyToOne
     @MapsId("userId")
     @JoinColumn(name = "user_id")
+    @JsonProperty(value = "user")
+    @JsonIgnoreProperties({"guild"})
     private User user;
 
     @ManyToOne
     @MapsId("guildId")
     @JoinColumn(name = "guild_id")
-    @JsonBackReference
+    @JsonProperty(value = "guild")
+    @JsonIgnoreProperties({"users"})
     private Guild guild;
 
+    @JsonProperty(value = "role")
     private String role;
 
 }

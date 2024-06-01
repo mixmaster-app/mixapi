@@ -1,5 +1,7 @@
 package fr.kiiow.mixapi.models.User;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import fr.kiiow.mixapi.models.Guild.Guild;
 import fr.kiiow.mixapi.models.Guild.GuildUser;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -29,6 +31,11 @@ public class User {
     private CharacterType characterType;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private GuildUser guild;
+    @JoinTable(
+            name = "guild_user",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "guild_id", referencedColumnName = "id")
+    )
+    @JsonIgnoreProperties({"users"})
+    private Guild guild;
 }

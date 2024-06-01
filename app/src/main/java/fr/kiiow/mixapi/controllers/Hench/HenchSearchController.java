@@ -3,24 +3,19 @@ package fr.kiiow.mixapi.controllers.Hench;
 import fr.kiiow.mixapi.controllers.AbstractController;
 import fr.kiiow.mixapi.dao.Hench.HenchFilters;
 import fr.kiiow.mixapi.models.Hench.Hench;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
 @RestController
 public class HenchSearchController extends AbstractController implements IHenchController {
 
-    @GetMapping(path = "/hench/q")
+    @GetMapping(path = "/henchs/q")
     public ResponseEntity<List<Hench>> findHenchBy(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) Integer limit,
