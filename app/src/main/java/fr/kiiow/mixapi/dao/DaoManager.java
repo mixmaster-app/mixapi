@@ -1,6 +1,8 @@
 package fr.kiiow.mixapi.dao;
 
+import fr.kiiow.mixapi.dao.Guild.IGuildDao;
 import fr.kiiow.mixapi.dao.Hench.IHenchDao;
+import fr.kiiow.mixapi.dao.User.IUserDao;
 import fr.kiiow.mixapi.dao.World.IZoneDao;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,4 +17,10 @@ public class DaoManager {
 
     @Autowired
     private IHenchDao henchDao;
+
+    @Autowired
+    private IUserDao userDao;
+
+    @Autowired
+    private IGuildDao guildDao;
 }
