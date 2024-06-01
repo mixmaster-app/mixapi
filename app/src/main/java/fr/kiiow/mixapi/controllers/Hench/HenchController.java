@@ -15,7 +15,7 @@ import java.util.Optional;
 public class HenchController extends AbstractController implements IHenchController {
 
     @GetMapping(path = "/henchs")
-    public List<Hench> findAllHenchs() {
+    public List<Hench> findAll() {
         return getDaoManager().getHenchDao().findAll();
     }
 
