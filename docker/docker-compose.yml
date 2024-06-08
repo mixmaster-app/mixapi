@@ -1,8 +1,8 @@
 services:
   mixapi:
-    image: "kiiow/mixapi:latest"
+    image: "ghcr.io/kiiow/mixapi:latest"
     container_name: mixapi
     ports:
       - 0.0.0.0:3000:3000
     volumes:
-      - /var/app/mixapi:/var/app/mixapi/config
+      - /var/app/mixapi/config:/var/app/config
