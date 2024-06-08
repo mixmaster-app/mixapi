@@ -1,6 +1,5 @@
 package fr.kiiow.mixapi.models.security;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
