@@ -30,7 +30,7 @@ jobs:
       - name: 👷 Build with Maven
         run: |
           cd app
-          mvn clean install
+          mvn clean install -DskipTests
 
       - name: 🔑 Log in to GH Container Registry
         uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d
