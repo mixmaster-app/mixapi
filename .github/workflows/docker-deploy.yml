@@ -1,0 +1,47 @@
+# Deploy the Docker image on a defined server
+name: Deploy
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy-image:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: read
+
+    steps:
+      - name: 🛒 Checkout
+        uses: actions/checkout@v4
+
+      - name: 🚀 Deploy `docker-compose.yml`
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: ${{ vars.DEPLOY_SSH_HOST }}
+          port: ${{ vars.DEPLOY_SSH_PORT }}
+          username: ${{ secrets.DEPLOY_SSH_USERNAME }}
+          key: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
+          source: "docker/docker-compose.yml"
+          target: ${{ vars.DEPLOY_SSH_WORKDIR }}
+
+  restart-image:
+    runs-on: ubuntu-latest
+    needs: deploy-image
+
+    permissions:
+      contents: read
+      packages: read
+
+    steps:
+      - name: ♻️ Restart Docker image
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ vars.DEPLOY_SSH_HOST }}
+          port: ${{ vars.DEPLOY_SSH_PORT }}
+          username: ${{ secrets.DEPLOY_SSH_USERNAME }}
+          key: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
+          script: |
+            cd ${{ vars.DEPLOY_SSH_WORKDIR }}
+            docker compose -f ./docker/docker-compose.yml up -d --force-recreate
