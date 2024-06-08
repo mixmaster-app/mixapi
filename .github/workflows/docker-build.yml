@@ -28,7 +28,9 @@ jobs:
           cache-dependency-path: "app/pom.xml"
 
       - name: 👷 Build with Maven
-        run: mvn clean install
+        run: |
+          cd app
+          mvn clean install
 
       - name: 🔑 Log in to GH Container Registry
         uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d
@@ -46,7 +48,7 @@ jobs:
       - name: 🐋 Build and Push
         uses: docker/build-push-action@0565240e2d4ab88bba5387d719585280857ece09
         with:
-          file: ./Dockerfile
+          file: Dockerfile
           context: .
           push: true
           tags: ${{ steps.meta.outputs.tags }}
