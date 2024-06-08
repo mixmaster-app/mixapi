@@ -6,12 +6,10 @@ RUN bash -c 'mkdir -p /var/app/{config,bin}'
 WORKDIR /var/app
 
 COPY app/src/main/resources ./config
-COPY app/target/mixapi-0.0.1-SNAPSHOT.jar ./bin
+COPY app/target/mixapi.jar ./bin
 
 VOLUME [ "/var/app/config" ]
 
-ENTRYPOINT ["java", "-jar", "./bin/mixapi-0.0.1-SNAPSHOT.jar", "--spring.config.location=./config/application.yml"]
-
-# RUN chmod 755 /var/app
+ENTRYPOINT ["java", "-jar", "./bin/mixapi.jar", "--spring.config.location=./config/application.yml"]
 
 EXPOSE 3000
