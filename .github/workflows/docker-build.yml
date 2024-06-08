@@ -1,7 +1,10 @@
 # Publish a Docker image of the project on the release of a new version
 name: Build & Publish Docker
 
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+  release:
+    types: [ "published" ]
 
 env:
   REGISTRY: ghcr.io
