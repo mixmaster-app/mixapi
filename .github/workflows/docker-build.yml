@@ -7,7 +7,7 @@ on:
     types: [ "published" ]
 
 env:
-  REGISTRY: ghcr.io
+  REGISTRY: ${{ vars.DOCKER_REGISTRY }}
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
@@ -42,17 +42,10 @@ jobs:
           username: ${{ secrets.GHCR_USERNAME }}
           password: ${{ secrets.GHCR_TOKEN }}
 
-      - name: 🛠️ Extract metadata for Doker
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-
       - name: 🐋 Build and Push
         uses: docker/build-push-action@v5
         with:
           file: Dockerfile
           context: .
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
