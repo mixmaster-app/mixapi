@@ -2,6 +2,7 @@ package fr.kiiow.mixapi.dao;
 
 import fr.kiiow.mixapi.dao.guild.IGuildDao;
 import fr.kiiow.mixapi.dao.hench.IHenchDao;
+import fr.kiiow.mixapi.dao.security.IAuthenticationUserDao;
 import fr.kiiow.mixapi.dao.user.IUserDao;
 import fr.kiiow.mixapi.dao.world.IZoneDao;
 import lombok.Getter;
@@ -23,4 +24,7 @@ public class DaoManager {
 
     @Autowired
     private IGuildDao guildDao;
+
+    @Autowired
+    private IAuthenticationUserDao authenticationUserDao;
 }
