@@ -1,7 +1,6 @@
 package fr.kiiow.mixapi.controllers.scrapper;
 
 import fr.kiiow.mixapi.controllers.AbstractController;
-import fr.kiiow.mixapi.models.config.Config;
 import fr.kiiow.mixapi.models.hench.Hench;
 import fr.kiiow.mixapi.services.scrapper.HenchParser;
 import fr.kiiow.mixapi.services.scrapper.HenchScrapper;
@@ -19,7 +18,8 @@ public class HenchScrapperController extends AbstractController implements IScra
 
     @GetMapping(path = "/henchs")
     public void launchHenchScrapping() throws Exception {
-        List<Hench> henchs = HenchParser.parseHenchList(scrapper.getPage());
-        this.getDaoManager().getHenchDao().saveAll(henchs);
+        HenchParser parser = new HenchParser(scrapper.getPage(), this.getDaoManager());
+        parser.parseHenchList();
+        this.getDaoManager().getHenchDao().saveAll(parser.getHenchParsed());
     }
 }

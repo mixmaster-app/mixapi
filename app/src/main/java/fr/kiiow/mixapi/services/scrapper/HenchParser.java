@@ -1,29 +1,38 @@
 package fr.kiiow.mixapi.services.scrapper;
 
+import fr.kiiow.mixapi.dao.DaoManager;
 import fr.kiiow.mixapi.models.hench.Hench;
-import org.htmlunit.html.DomNode;
+import lombok.Getter;
 import org.htmlunit.html.HtmlElement;
 import org.htmlunit.html.HtmlPage;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class HenchParser {
 
-    public static List<Hench> parseHenchList(HtmlPage page) {
-        System.out.println("got he following page : " + page.getUrl().toString());
-        List<Hench> henchs = new ArrayList<>();
+    private final HtmlPage pageToParse;
 
-        List<HtmlElement> henchsToParse = page.getByXPath("//div[@class='henchs']/div[contains(@class,'hench')]").stream().map(x -> (HtmlElement) x).toList();
-        System.out.println("Found " + henchsToParse.size() + " henchs");
-        for(HtmlElement henchModal : henchsToParse) {
-            henchs.add(parseHench(henchModal));
-        }
+    private DaoManager daoManager;
 
-        return henchs;
+    @Getter
+    private List<Hench> henchParsed;
+
+    public HenchParser(HtmlPage pageToParse, DaoManager daoManger) {
+        this.pageToParse = pageToParse;
+        this.daoManager = daoManger;
     }
 
-    public static Hench parseHench(HtmlElement henchDom) {
+    public void parseHenchList() {
+//        System.out.println("got he following page : " + this.pageToParse.getUrl().toString());
+
+        List<HtmlElement> henchsToParse = this.pageToParse.getByXPath("//div[@class='henchs']/div[contains(@class,'hench')]").stream().map(x -> (HtmlElement) x).toList();
+        System.out.println("Found " + henchsToParse.size() + " henchs");
+        for(HtmlElement henchModal : henchsToParse) {
+            henchParsed.add(parseHench(henchModal));
+        }
+    }
+
+    public Hench parseHench(HtmlElement henchDom) {
         Hench hench = new Hench();
         HtmlElement henchModal = henchDom.querySelector(".modal");
         hench.setId(Integer.valueOf(henchDom.getAttribute("id")));
