@@ -32,3 +32,8 @@ springdoc:
     path: /swagger
   api-docs:
     path: /swagger.json
+
+# Custom
+mixapi:
+  mixmaster:
+    base-path: mixmaster-online.fr
