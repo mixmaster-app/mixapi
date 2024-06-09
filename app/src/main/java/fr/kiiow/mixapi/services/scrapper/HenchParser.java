@@ -14,12 +14,46 @@ public class HenchParser {
         System.out.println("got he following page : " + page.getUrl().toString());
         List<Hench> henchs = new ArrayList<>();
 
-        System.out.println("Found " + page.querySelectorAll(".hench").size() + " henchs");
-        for(DomNode hench : page.querySelectorAll(".hench")) {
-            HtmlElement henchModal = (HtmlElement) hench;
-            System.out.println("hench id: " + henchModal.getAttribute("id"));
+        List<HtmlElement> henchsToParse = page.getByXPath("//div[@class='henchs']/div[contains(@class,'hench')]").stream().map(x -> (HtmlElement) x).toList();
+        System.out.println("Found " + henchsToParse.size() + " henchs");
+        for(HtmlElement henchModal : henchsToParse) {
+            henchs.add(parseHench(henchModal));
         }
 
         return henchs;
+    }
+
+    public static Hench parseHench(HtmlElement henchDom) {
+        Hench hench = new Hench();
+        HtmlElement henchModal = henchDom.querySelector(".modal");
+        hench.setId(Integer.valueOf(henchDom.getAttribute("id")));
+        hench.setName(henchModal.querySelector("h2").getTextContent());
+        // hench.setType();
+        // hench.setAttackType();
+
+        String aquireMods = henchModal.querySelectorAll(".spec .one").get(1).getTextContent();
+        hench.setDropable(aquireMods.contains("Drop"));
+        hench.setMixable(aquireMods.contains("Mix"));
+        hench.setQuestable(aquireMods.contains("Quête"));
+
+        String henchLevels = henchModal.querySelector(".niv").getTextContent();
+        String[] henchRange = henchLevels.substring(6).split(" - ");
+
+        hench.setMinimumLevel(Integer.valueOf(henchRange[0].trim()));
+        hench.setMaximumLevel(Integer.valueOf(henchRange[1].trim()));
+
+        String henchTypeAndDropRate = henchModal.querySelector(".stat .stars").getTextContent();
+        String henchTypeString = henchTypeAndDropRate.substring(henchTypeAndDropRate.indexOf("- Hench ") + 8);
+        String henchDropRate = null;
+        if(henchTypeAndDropRate.contains("drop: ")) {
+            henchDropRate = henchTypeAndDropRate.substring(henchTypeAndDropRate.indexOf("drop: ") + 6, henchTypeAndDropRate.indexOf(" - "));
+        }
+
+        for(HtmlElement stat : henchModal.querySelectorAll(".statistiques .skills div").stream().map(x -> (HtmlElement) x).toList()) {
+            System.out.println(stat.querySelector(".s-title").getTextContent().trim());
+            System.out.println(stat.querySelector(".s-value").getTextContent().trim());
+        }
+
+        return hench;
     }
 }
