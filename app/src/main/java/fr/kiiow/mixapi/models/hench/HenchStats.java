@@ -19,6 +19,6 @@ public class HenchStats {
 
     private Integer accuracy;
 
-    private Integer chance;
+    private Integer luck;
 
 }
