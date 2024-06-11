@@ -1,6 +1,7 @@
 # Mixapi
 
-New mixmaster api version written in Java.
+Unofficial API for the game [mixmaster FR][mixmaster-fr-website].\
+_[wikipedia link][mixmaster-wikipedia]_
 
 ## Database schema
 
@@ -25,23 +26,23 @@ All the configuration of the application is present in `./app/srv/main/resources
 
 By doing so you can override the database connection or add some debugging config lines
 ```yaml
-## Local database config
+# Local database config
 spring:
   datasource:
     url: jdbc:mysql://127.0.0.1:3306/mixmaster?serverTimezone=UTC
     username: root
     password: root
-  ## Show SQL request executed by JPA
-#  jpa:
-#    show-sql: true
+  # Show SQL request executed by JPA
+  jpa:
+    show-sql: true
 
-## Increase debug logging level
-#logging:
-#  level:
-#    org:
-#      hibernate:
-#        SQL: DEBUG
-#        type: trace
+# Increase debug logging level
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG
+        type: trace
 ```
 
 ### 2. Run the application
@@ -86,6 +87,11 @@ docker run -p 0.0.0.0:3000:3000/tcp mixmaster-app/mixapi:latest
 
 you can also use existing docker images available on GitHub container registry ([ghcr.io][github-container-registry]): [mixapi docker registry][mixapi-docker-registry]
 
+[mixmaster-fr-website]: https://mixmaster-online.fr/
+[mixmaster-wikipedia]: https://en.wikipedia.org/wiki/Mix_Master
+
 [mixmaster-data-repository]: https://github.com/mixmaster-app/mixmaster-data
 [mixapi-docker-registry]: https://github.com/mixmaster-app/mixapi/pkgs/container/mixapi
+
 [github-container-registry]: https://ghcr.io
+
