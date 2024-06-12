@@ -16,10 +16,10 @@ public class HenchParser {
 
     private final HtmlPage pageToParse;
 
-    private DaoManager daoManager;
+    private final DaoManager daoManager;
 
     @Getter
-    private List<Hench> henchParsed;
+    private final List<Hench> henchParsed;
 
     public HenchParser(HtmlPage pageToParse, DaoManager daoManger) {
         this.pageToParse = pageToParse;
@@ -31,7 +31,7 @@ public class HenchParser {
 //        System.out.println("got he following page : " + this.pageToParse.getUrl().toString());
 
         List<HtmlElement> henchsToParse = this.pageToParse.getByXPath("//div[@class='henchs']/div[contains(@class,'hench')]").stream().map(x -> (HtmlElement) x).toList();
-        System.out.println("Found " + henchsToParse.size() + " henchs");
+        System.out.println("Found '" + henchsToParse.size() + "' henchs to parse");
         for(HtmlElement henchModal : henchsToParse) {
             henchParsed.add(parseHench(henchModal));
         }
@@ -64,7 +64,7 @@ public class HenchParser {
         // Hench type and DropRate
         String henchTypeAndDropRate = henchModal.querySelector(".stat .stars").getTextContent();
 
-        String henchTypeString = henchTypeAndDropRate.substring(henchTypeAndDropRate.indexOf("- Hench ") + 8);
+        String henchTypeString = henchTypeAndDropRate.substring(henchTypeAndDropRate.indexOf("Hench ") + 6);
         Optional<HenchType> typeExist = this.daoManager.getHenchTypeDao().findByName(henchTypeString);
         typeExist.ifPresent(hench::setType);
 
@@ -96,7 +96,6 @@ public class HenchParser {
 
         hench.setStats(henchStats);
 
-        System.out.println(hench);
         return hench;
     }
 }
