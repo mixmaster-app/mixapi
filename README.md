@@ -1,5 +1,8 @@
 # Mixapi
 
+[![](https://github.com/mixmaster-app/mixapi/actions/workflows/docker-build.yml/badge.svg?branch=master)](https://github.com/mixmaster-app/mixapi/actions/workflows/docker-build.yml?query=branch%3Amaster "Latest Release")
+[![](https://img.shields.io/github/release/mixmaster-app/mixapi.svg)](https://github.com/mixmaster-app/mixapi/releases/latest "mixapi latest release")
+
 Unofficial API for the game [mixmaster FR][mixmaster-fr-website].\
 _[wikipedia link][mixmaster-wikipedia]_
 
@@ -20,7 +23,7 @@ spring:
 
 ### 1. Override configuration
 
-All the configuration of the application is present in `./app/srv/main/resources/application.yml`. If you need to edit some of the configuration you can do it in the `application-local.yml` yml file.
+All the configuration of the application is present in `./app/src/main/resources/application.yml`. If you need to edit some of the configuration you can do it in the `application-local.yml` yml file.
 
 By doing so you can override the database connection or add some debugging config lines
 ```yaml
@@ -76,9 +79,9 @@ To setup your own dev environment you'll need:
 - Java SDK 21.x ([Download java][download-java-history])
 - Maven 3.x ([Download maven][download-maven-history])
 
-If you want to set up MySQL locally you can use the `docker\dev\docker-compose.yml` file to do so (On Windows this will require you to [install docker-desktop][docker-desktop-install-docs]).
+If you want to set up MySQL locally you can use the `./docker/dev/docker-compose.yml` file to do so (On Windows this will require you to [install docker-desktop][docker-desktop-install-docs]).
 
-For any configuration changes required you can create an `app\src\main\resources\application-local.yml` file which will override the main `application.yml` configs (cf. **How to ?**).
+For any configuration changes required you can create an `./app/src/main/resources/application-local.yml` file which will override the main `application.yml` configs (cf. **How to ?**).
 
 [mixmaster-data-repository]: https://github.com/mixmaster-app/mixmaster-data
 [mixapi-docker-registry]: https://github.com/mixmaster-app/mixapi/pkgs/container/mixapi
