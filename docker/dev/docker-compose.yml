@@ -1,0 +1,12 @@
+services:
+  database:
+    image: "mysql:latest"
+    environment:
+      MYSQL_USER: mixmaster
+      MYSQL_PASSWORD: mixmaster
+      MYSQL_DATABASE: mixmaster
+      MYSQL_RANDOM_ROOT_PASSWORD: yes
+    ports:
+      - 33061:3306
+    volumes:
+      - ./data:/var/lib/mysql

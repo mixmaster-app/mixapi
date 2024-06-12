@@ -7,7 +7,7 @@ _[wikipedia link][mixmaster-wikipedia]_
 
 The database schema is available in the [mixmaster-data][mixmaster-data-repository] repository.
 
-You can also use JPA to create the database by using the following configuration:
+You can also use [Hibernate][hibernate-database-init-docs] to initialise the database schema on API startup.
 
 ```yaml
 spring:
@@ -15,8 +15,6 @@ spring:
     hibernate:
       ddl-auto: update
 ```
-
-The advantage is that it will only create necessary table and relations.
 
 ## How to ?
 
@@ -45,35 +43,20 @@ logging:
         type: trace
 ```
 
-### 2. Run the application
-
-To execute the application you need to have `Java 21.x` and `maven` installed on your computer.
+### 2. Maven commands
 
 ```shell
+# Run the application
 mvn spring-boot:run
-```
 
-### 3. Execute the tests
-
-```shell
+# Execute the tests
 mvn test
-```
 
-### 4. Build the application Jar
-
-```shell
+# Build the application
 mvn clean install
 
 # Or if you don't want the test to execute while building the jar
 mvn clean install -DskipTests
-```
-
-This command will build the application and create a `mixapi.jar` file under the `./app/target` folder, along with some other files and folder.
-
-You can then use the built jar file to launch the application
-
-```shell
-java -jar target\mixapi.jar
 ```
 
 ## Docker
@@ -84,14 +67,27 @@ To build the docker image and then launch it we use the following commands
 docker build -t mixmaster-app/mixapi:latest .
 docker run -p 0.0.0.0:3000:3000/tcp mixmaster-app/mixapi:latest
 ```
+you can also use existing docker images available on GitHub container registry ([https://ghcr.io][github-container-registry]): [mixapi docker registry][mixapi-docker-registry]
 
-you can also use existing docker images available on GitHub container registry ([ghcr.io][github-container-registry]): [mixapi docker registry][mixapi-docker-registry]
+## Dev environment
 
-[mixmaster-fr-website]: https://mixmaster-online.fr/
-[mixmaster-wikipedia]: https://en.wikipedia.org/wiki/Mix_Master
+To setup your own dev environment you'll need:
+
+- Java SDK 21.x ([Download java][download-java-history])
+- Maven 3.x ([Download maven][download-maven-history])
+
+If you want to set up MySQL locally you can use the `docker\dev\docker-compose.yml` file to do so (On Windows this will require you to [install docker-desktop][docker-desktop-install-docs]).
+
+For any configuration changes required you can create an `app\src\main\resources\application-local.yml` file which will override the main `application.yml` configs (cf. **How to ?**).
 
 [mixmaster-data-repository]: https://github.com/mixmaster-app/mixmaster-data
 [mixapi-docker-registry]: https://github.com/mixmaster-app/mixapi/pkgs/container/mixapi
+[mixmaster-fr-website]: https://mixmaster-online.fr/
+[mixmaster-wikipedia]: https://en.wikipedia.org/wiki/Mix_Master
+
+[download-java-history]: https://www.oracle.com/java/technologies/javase/jdk21-archive-downloads.html
+[download-maven-history]: https://maven.apache.org/docs/history.html
+[docker-desktop-install-docs]: https://docs.docker.com/desktop/install/windows-install/
+[hibernate-database-init-docs]: https://docs.spring.io/spring-boot/docs/1.1.0.M1/reference/html/howto-database-initialization.html
 
 [github-container-registry]: https://ghcr.io
-
