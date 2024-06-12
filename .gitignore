@@ -1,5 +1,6 @@
 # Local config
 application-local.yml
+docker/dev/data/**
 
 # Miscellaneous
 *.java.hsp
