@@ -49,40 +49,38 @@ public class HenchParser {
     public Hench parseHench(Element henchDom) {
         Hench hench = new Hench();
         Element henchModal = henchDom.expectFirst(".modal");
+        Element elementStat = henchModal.expectFirst(".stat");
+        Element elementSpec = elementStat.expectFirst(".spec");
 
         // Hench Basics
         hench.setId(Integer.valueOf(henchDom.attr("id")));
         hench.setName(Objects.requireNonNull(henchModal.getElementsByTag("h2").first()).text());
         hench.setImage(henchDom.expectFirst(".open-modal .img img").attr("src"));
-        String attackTypeString = henchModal.expectFirst(".spec .one .s-value").text().trim();
-        hench.setAttackType(AttackType.findByText(attackTypeString).getType());
 
-        Element modalSpecs = henchModal.expectFirst(".stat>.spec");
+        String attackTypeString = elementSpec.getElementsByClass("one").getFirst().text().trim();
+        hench.setAttackType(AttackType.findByText(attackTypeString).getType());
         // Hench Aquisition
-        String aquireMods = modalSpecs.getElementsByClass("one").text();
+        String aquireMods = elementSpec.getElementsByClass("one").get(1).text();
         hench.setDropable(aquireMods.contains("Drop"));
         hench.setMixable(aquireMods.contains("Mix"));
         hench.setQuestable(aquireMods.contains("Quête"));
 
         // Hench Level
-        String henchLevels = Objects.requireNonNull(henchModal.getElementsByClass("niv").first()).text();
+        String henchLevels = henchModal.getElementsByClass("niv").getFirst().text();
         String[] henchRange = henchLevels.substring(6).split(" - ");
 
         hench.setMinimumLevel(Integer.valueOf(henchRange[0].trim()));
         hench.setMaximumLevel(Integer.valueOf(henchRange[1].trim()));
 
-        Element modalStats = henchModal.expectFirst(".stat");
-
         // Hench type and DropRate
-        String henchTypeAndDropRate = modalStats.getElementsByClass("stars").text();
+        String henchTypeAndDropRate = elementStat.getElementsByClass("stars").text();
 
         String henchTypeString = henchTypeAndDropRate.substring(henchTypeAndDropRate.indexOf("Hench ") + 6);
         Optional<HenchType> typeExist = this.daoManager.getHenchTypeDao().findByName(henchTypeString);
         typeExist.ifPresent(hench::setType);
 
-        String henchDropRate = null;
         if(henchTypeAndDropRate.contains("drop: ")) {
-            henchDropRate = henchTypeAndDropRate.substring(henchTypeAndDropRate.indexOf("drop: ") + 6, henchTypeAndDropRate.indexOf(" - "));
+            hench.setDropRate(Integer.valueOf(henchTypeAndDropRate.substring(henchTypeAndDropRate.indexOf("drop: ") + 6, henchTypeAndDropRate.indexOf(" - "))));
         }
 
         // Hench stats
@@ -105,6 +103,9 @@ public class HenchParser {
         henchStats.setLuck(Integer.valueOf(rawStats.get("CHANCE")));
 
         hench.setStats(henchStats);
+
+        List<String> habitats = Arrays.stream(elementSpec.getElementsByClass("one").get(2).expectFirst(".s-value").text().split(",")).map(String::trim).toList();
+        System.out.println("Hench habitats " + habitats);
 
         return hench;
     }

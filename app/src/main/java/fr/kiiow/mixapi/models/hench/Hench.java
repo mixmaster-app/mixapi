@@ -50,6 +50,10 @@ public class Hench {
     @JsonProperty(value = "is_questable")
     private boolean isQuestable;
 
+    @Column(name = "drop_rate")
+    @JsonProperty(value = "drop_rate")
+    private Integer dropRate;
+
     @Embedded
     private HenchStats stats;
 
