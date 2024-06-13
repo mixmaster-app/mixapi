@@ -10,7 +10,10 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "hench_mix")
+@Table(
+        name = "hench_mix",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"hench_result_id", "item_left_id", "hench_left_id", "item_right_id", "hench_right_id"})
+)
 public class HenchMix {
 
     @Id

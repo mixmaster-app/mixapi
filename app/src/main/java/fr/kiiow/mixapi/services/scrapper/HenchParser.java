@@ -188,7 +188,21 @@ public class HenchParser {
             });
             isItemLeft.ifPresent(henchMix::setItemLeft);
             isItemRight.ifPresent(henchMix::setItemRight);
-            mixes.add(henchMix);
+
+            // if the mix doesn't exist add it to the mixes
+            if(!this.daoManager.getHenchMixDao().existsByHenchResultIdAndItemLeftIdAndHenchLeftIdAndItemRightIdAndHenchRightId(
+                    henchMix.getHenchResult().getId(),
+                    Optional.ofNullable(henchMix.getItemLeft())
+                            .map(Item::getId)
+                            .orElse(null),
+                    henchMix.getHenchLeft().getId(),
+                    Optional.ofNullable(henchMix.getItemRight())
+                            .map(Item::getId)
+                            .orElse(null),
+                    henchMix.getHenchRight().getId()
+            )) {
+                mixes.add(henchMix);
+            }
         }
         henchMixesParsed.addAll(mixes);
 
