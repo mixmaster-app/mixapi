@@ -49,10 +49,16 @@
 			<scope>test</scope>
 		</dependency>
 
+		<!-- Web Parsing -->
 		<dependency>
-			<groupId>org.htmlunit</groupId>
-			<artifactId>htmlunit</artifactId>
-			<version>4.2.0</version>
+			<groupId>org.jsoup</groupId>
+			<artifactId>jsoup</artifactId>
+			<version>1.17.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents.client5</groupId>
+			<artifactId>httpclient5</artifactId>
+			<version>5.3.1</version>
 		</dependency>
 
 		<!-- Logging -->

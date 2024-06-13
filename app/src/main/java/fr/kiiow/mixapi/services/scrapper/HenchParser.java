@@ -6,63 +6,75 @@ import fr.kiiow.mixapi.models.hench.Hench;
 import fr.kiiow.mixapi.models.hench.HenchStats;
 import fr.kiiow.mixapi.models.hench.HenchType;
 import lombok.Getter;
-import org.htmlunit.html.DomElement;
-import org.htmlunit.html.HtmlElement;
-import org.htmlunit.html.HtmlPage;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.util.*;
 
 public class HenchParser {
 
-    private final HtmlPage pageToParse;
+    private final static Logger log = LogManager.getLogger();
+
+    private final Document pageToParse;
 
     private final DaoManager daoManager;
 
     @Getter
     private final List<Hench> henchParsed;
 
-    public HenchParser(HtmlPage pageToParse, DaoManager daoManger) {
+    public HenchParser(Document pageToParse, DaoManager daoManger) {
         this.pageToParse = pageToParse;
         this.daoManager = daoManger;
         this.henchParsed = new ArrayList<>();
     }
 
     public void parseHenchList() {
-//        System.out.println("got he following page : " + this.pageToParse.getUrl().toString());
+        System.out.println("Go to : " + this.pageToParse.baseUri());
 
-        List<HtmlElement> henchsToParse = this.pageToParse.getByXPath("//div[@class='henchs']/div[contains(@class,'hench')]").stream().map(x -> (HtmlElement) x).toList();
+        Elements henchsToParse = this.pageToParse.getElementsByClass("hench");
         System.out.println("Found '" + henchsToParse.size() + "' henchs to parse");
-        for(HtmlElement henchModal : henchsToParse) {
-            henchParsed.add(parseHench(henchModal));
+        for(Element henchDom : henchsToParse) {
+            try {
+                henchParsed.add(this.parseHench(henchDom));
+            } catch (Exception e) {
+                e.printStackTrace();
+                log.error("Error, {}", e.getMessage());
+            }
         }
     }
 
-    public Hench parseHench(HtmlElement henchDom) {
+    public Hench parseHench(Element henchDom) {
         Hench hench = new Hench();
-        HtmlElement henchModal = henchDom.querySelector(".modal");
+        Element henchModal = henchDom.expectFirst(".modal");
 
         // Hench Basics
-        hench.setId(Integer.valueOf(henchDom.getAttribute("id")));
-        hench.setName(henchModal.querySelector("h2").getTextContent());
-        hench.setImage(((HtmlElement) henchDom.querySelector(".open-modal .img img")).getAttribute("src"));
-        String attackTypeString = henchModal.querySelectorAll(".spec .one .s-value").getFirst().getTextContent().trim();
+        hench.setId(Integer.valueOf(henchDom.attr("id")));
+        hench.setName(Objects.requireNonNull(henchModal.getElementsByTag("h2").first()).text());
+        hench.setImage(henchDom.expectFirst(".open-modal .img img").attr("src"));
+        String attackTypeString = henchModal.expectFirst(".spec .one .s-value").text().trim();
         hench.setAttackType(AttackType.findByText(attackTypeString).getType());
 
+        Element modalSpecs = henchModal.expectFirst(".stat>.spec");
         // Hench Aquisition
-        String aquireMods = henchModal.querySelectorAll(".spec .one").get(1).getTextContent();
+        String aquireMods = modalSpecs.getElementsByClass("one").text();
         hench.setDropable(aquireMods.contains("Drop"));
         hench.setMixable(aquireMods.contains("Mix"));
         hench.setQuestable(aquireMods.contains("Quête"));
 
         // Hench Level
-        String henchLevels = henchModal.querySelector(".niv").getTextContent();
+        String henchLevels = Objects.requireNonNull(henchModal.getElementsByClass("niv").first()).text();
         String[] henchRange = henchLevels.substring(6).split(" - ");
 
         hench.setMinimumLevel(Integer.valueOf(henchRange[0].trim()));
         hench.setMaximumLevel(Integer.valueOf(henchRange[1].trim()));
 
+        Element modalStats = henchModal.expectFirst(".stat");
+
         // Hench type and DropRate
-        String henchTypeAndDropRate = henchModal.querySelector(".stat .stars").getTextContent();
+        String henchTypeAndDropRate = modalStats.getElementsByClass("stars").text();
 
         String henchTypeString = henchTypeAndDropRate.substring(henchTypeAndDropRate.indexOf("Hench ") + 6);
         Optional<HenchType> typeExist = this.daoManager.getHenchTypeDao().findByName(henchTypeString);
@@ -75,14 +87,12 @@ public class HenchParser {
 
         // Hench stats
         Map<String, String> rawStats = new HashMap<>();
-        for (DomElement stat : ((HtmlElement) henchModal.querySelector(".statistiques .skills")).getChildElements()) {
-            if ("div".equals(stat.getTagName())) {
-                HtmlElement title = stat.querySelector(".s-title");
-                HtmlElement value = stat.querySelector(".s-value > div");
+        for (Element stat : henchModal.expectFirst(".statistiques .skills").children()) {
+            if ("div".equals(stat.tagName())) {
+                Element title = stat.expectFirst(".s-title");
+                Element value = stat.expectFirst(".s-value > div");
 
-                if (title != null && value != null) {
-                    rawStats.put(title.getTextContent(), value.getTextContent());
-                }
+                rawStats.put(title.text(), value.text());
             }
         }
         HenchStats henchStats = new HenchStats();
