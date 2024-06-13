@@ -46,6 +46,6 @@ public class HenchController extends AbstractController implements IHenchControl
             log.warn("Hench not found with id '{}'", id);
             return this._404_Not_Found(null);
         }
-        return this.resultOk(hench.get().getMix());
+        return this.resultOk(hench.get().getMixes());
     }
 }

@@ -32,8 +32,8 @@ public class HenchScrapper {
                 .addParameter("mystere", "1")
                 .addParameter("metal", "1")
                 .addParameter("dropoumixouquete", "1")
-                .addParameter("lvmini", "180")
-                .addParameter("lvmax", "180")
+                .addParameter("lvmini", "0")
+                .addParameter("lvmax", "500")
         ;
         return builder.build().toString();
     }

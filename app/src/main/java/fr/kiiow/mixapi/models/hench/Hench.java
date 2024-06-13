@@ -72,7 +72,7 @@ public class Hench {
 
     @OneToMany(mappedBy = "henchResult")
     @JsonProperty(value = "mix")
-    private List<HenchMix> mix;
+    private List<HenchMix> mixes;
 
     @OneToMany(mappedBy = "henchLeft")
     @JsonIgnore
@@ -94,5 +94,12 @@ public class Hench {
             this.zones = new ArrayList<>();
         }
         this.zones.add(zone);
+    }
+
+    public void addMixes(List<HenchMix> mixes) {
+        if(this.mixes == null) {
+            this.mixes = new ArrayList<>();
+        }
+        this.mixes.addAll(mixes);
     }
 }

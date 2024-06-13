@@ -19,5 +19,6 @@ public class HenchScrapperController extends AbstractController implements IScra
         parser.parseHenchsData();
         this.getDaoManager().getZoneDao().saveAll(parser.getZoneParsed());
         this.getDaoManager().getHenchDao().saveAll(parser.getHenchParsed());
+        this.getDaoManager().getHenchMixDao().saveAll(parser.getHenchMixesParsed());
     }
 }

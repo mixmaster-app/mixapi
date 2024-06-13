@@ -14,6 +14,7 @@ import lombok.Setter;
 public class HenchMix {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @ManyToOne
