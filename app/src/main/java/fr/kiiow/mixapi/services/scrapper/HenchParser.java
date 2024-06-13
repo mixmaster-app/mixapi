@@ -5,6 +5,7 @@ import fr.kiiow.mixapi.models.hench.AttackType;
 import fr.kiiow.mixapi.models.hench.Hench;
 import fr.kiiow.mixapi.models.hench.HenchStats;
 import fr.kiiow.mixapi.models.hench.HenchType;
+import fr.kiiow.mixapi.models.world.Zone;
 import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -25,13 +26,17 @@ public class HenchParser {
     @Getter
     private final List<Hench> henchParsed;
 
+    @Getter
+    private final List<Zone> zoneParsed;
+
     public HenchParser(Document pageToParse, DaoManager daoManger) {
         this.pageToParse = pageToParse;
         this.daoManager = daoManger;
         this.henchParsed = new ArrayList<>();
+        this.zoneParsed = new ArrayList<>();
     }
 
-    public void parseHenchList() {
+    public void parseHenchsData() {
         System.out.println("Go to : " + this.pageToParse.baseUri());
 
         Elements henchsToParse = this.pageToParse.getElementsByClass("hench");
@@ -105,7 +110,24 @@ public class HenchParser {
         hench.setStats(henchStats);
 
         List<String> habitats = Arrays.stream(elementSpec.getElementsByClass("one").get(2).expectFirst(".s-value").text().split(",")).map(String::trim).toList();
-        System.out.println("Hench habitats " + habitats);
+        for(String habitat: habitats) {
+            Zone zone;
+            Optional<Zone> zoneExist = zoneParsed.stream().filter(x -> x.getName().equals(habitat)).findFirst();
+
+            if (zoneExist.isEmpty()) {
+                Optional<Zone> zoneDb = this.daoManager.getZoneDao().findByName(habitat);
+                if(zoneDb.isPresent()) {
+                    zone = zoneDb.get();
+                } else {
+                    zone = new Zone();
+                    zone.setName(habitat);
+                    zoneParsed.add(zone);
+                }
+            } else {
+                zone = zoneExist.get();
+            }
+            hench.addZone(zone);
+        }
 
         return hench;
     }

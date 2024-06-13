@@ -61,11 +61,12 @@ public class Hench {
     @JoinColumn(name = "type_id")
     private HenchType type;
 
-    @OneToMany
+    @ManyToMany
     @JoinTable(
             name = "hench_zone",
             joinColumns = @JoinColumn(name = "hench_id"),
-            inverseJoinColumns = @JoinColumn(name = "zone_id")
+            inverseJoinColumns = @JoinColumn(name = "zone_id"),
+            uniqueConstraints = { @UniqueConstraint(columnNames = { "hench_id", "zone_id" }) }
     )
     private List<Zone> zones;
 
@@ -86,5 +87,12 @@ public class Hench {
         List<HenchMix> result = new ArrayList<>(evolutionsLeft);
         result.addAll(evolutionsRight);
         return result.stream().sorted(Comparator.comparingInt(HenchMix::getId)).toList();
+    }
+
+    public void addZone(Zone zone) {
+        if(this.zones == null) {
+            this.zones = new ArrayList<>();
+        }
+        this.zones.add(zone);
     }
 }
