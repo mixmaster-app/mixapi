@@ -82,6 +82,12 @@ public class Hench {
     @JsonIgnore
     private List<HenchMix> evolutionsRight;
 
+    public Hench() { }
+
+    public Hench(Integer id) {
+        this.id = id;
+    }
+
     @JsonProperty(value = "evolutions")
     public List<HenchMix> getHenchEvolutions() {
         List<HenchMix> result = new ArrayList<>(evolutionsLeft);

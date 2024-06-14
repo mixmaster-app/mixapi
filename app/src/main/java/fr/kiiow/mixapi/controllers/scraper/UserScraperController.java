@@ -20,16 +20,20 @@ public class UserScraperController extends AbstractController implements IScrape
 
     @GetMapping(path = "/users/{numberOfPages}")
     public void scrapUsers(@PathVariable int numberOfPages) {
-        this.log.info("Let's scrap '{}' pages", numberOfPages);
+        this.log.debug("Let's scrap '{}' pages", numberOfPages);
         try {
             userScraper.scrapPages(numberOfPages);
-            this.log.info("Found '{}' profiles to scrap", userScraper.getProfileIds().size());
+            this.log.debug("Found '{}' profiles to scrap", userScraper.getProfileIds().size());
             for(String profileId : userScraper.getProfileIds()) {
                 try {
-                    UserProfileParser parser = new UserProfileParser(userProfileScraper.getPage(profileId), this.getDaoManager());
+                    UserProfileParser parser = new UserProfileParser(profileId, userProfileScraper.getPage(profileId), this.getDaoManager());
                     parser.parseUserData();
-//                    this.getDaoManager().getUserDao().save(parser.getUser());
+                    if(parser.getUser().isGuilded()) {
+                        this.getDaoManager().getGuildDao().save(parser.getUser().getGuild());
+                    }
+                    this.getDaoManager().getUserDao().save(parser.getUser());
                 } catch (Exception e) {
+                    e.printStackTrace();
                     this.log.error("Error while parsing user profile : {}", e.getMessage());
                 }
             }

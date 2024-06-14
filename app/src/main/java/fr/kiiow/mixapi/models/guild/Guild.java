@@ -25,4 +25,10 @@ public class Guild {
     @JsonProperty(value = "users")
     @JsonIgnoreProperties({"guild"})
     private List<GuildUser> users;
+
+    public Guild() { }
+
+    public Guild(Integer id) {
+        this.id = id;
+    }
 }

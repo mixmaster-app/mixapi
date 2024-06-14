@@ -14,7 +14,7 @@ public class User {
 
     @Id
     @Column(name = "id")
-    private Integer id;
+    private String id;
 
     @Column(name = "nickname")
     private String nickname;
@@ -37,4 +37,8 @@ public class User {
     )
     @JsonIgnoreProperties({"users"})
     private Guild guild;
+
+    public boolean isGuilded() {
+        return guild != null;
+    }
 }

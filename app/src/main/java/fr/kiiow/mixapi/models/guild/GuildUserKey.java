@@ -16,7 +16,7 @@ public class GuildUserKey implements Serializable {
     private Integer guildId;
 
     @Column(name = "user_id")
-    private Integer userId;
+    private String userId;
 
     @Override
     public boolean equals(Object obj) {

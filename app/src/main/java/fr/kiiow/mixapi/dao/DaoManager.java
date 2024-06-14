@@ -5,6 +5,7 @@ import fr.kiiow.mixapi.dao.hench.IHenchDao;
 import fr.kiiow.mixapi.dao.hench.IHenchMixDao;
 import fr.kiiow.mixapi.dao.hench.IHenchTypeDao;
 import fr.kiiow.mixapi.dao.security.IAuthenticationUserDao;
+import fr.kiiow.mixapi.dao.user.ICharacterTypeDao;
 import fr.kiiow.mixapi.dao.user.IUserDao;
 import fr.kiiow.mixapi.dao.world.IItemDao;
 import fr.kiiow.mixapi.dao.world.IZoneDao;
@@ -33,6 +34,9 @@ public class DaoManager {
 
     @Autowired
     private IUserDao userDao;
+
+    @Autowired
+    private ICharacterTypeDao characterTypeDao;
 
     @Autowired
     private IGuildDao guildDao;
