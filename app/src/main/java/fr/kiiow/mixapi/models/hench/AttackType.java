@@ -8,7 +8,7 @@ public enum AttackType {
     DISTANCE(2),
     UNKNOWN(0);
 
-    private Integer type;
+    private final Integer type;
 
     AttackType(Integer type) {
         this.type = type;

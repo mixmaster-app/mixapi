@@ -1,8 +1,8 @@
 package fr.kiiow.mixapi.controllers.scrapper;
 
 import fr.kiiow.mixapi.controllers.AbstractController;
-import fr.kiiow.mixapi.services.scrapper.HenchParser;
-import fr.kiiow.mixapi.services.scrapper.HenchScrapper;
+import fr.kiiow.mixapi.services.scrapper.hench.HenchParser;
+import fr.kiiow.mixapi.services.scrapper.hench.HenchScrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

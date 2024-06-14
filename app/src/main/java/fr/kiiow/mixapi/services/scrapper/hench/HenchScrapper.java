@@ -1,23 +1,18 @@
-package fr.kiiow.mixapi.services.scrapper;
+package fr.kiiow.mixapi.services.scrapper.hench;
 
-import fr.kiiow.mixapi.models.config.Config;
+import fr.kiiow.mixapi.services.scrapper.AbstractScrapper;
 import org.apache.hc.core5.net.URIBuilder;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.net.URISyntaxException;
 
 @Service
-public class HenchScrapper {
-
-    @Autowired
-    private Config config;
+public class HenchScrapper extends AbstractScrapper {
 
     private static final String path = "listedeshenchs.php";
 
-    private String getUrl() throws URISyntaxException {
+    @Override
+    protected String getUrl() throws URISyntaxException {
         URIBuilder builder = new URIBuilder();
         builder
                 .setScheme("https")
@@ -36,13 +31,6 @@ public class HenchScrapper {
                 .addParameter("lvmax", "500")
         ;
         return builder.build().toString();
-    }
-
-    public Document getPage() throws Exception{
-        return Jsoup.connect(this.getUrl())
-                .userAgent(config.getWebUserAgent())
-                .maxBodySize(0)
-                .get();
     }
 
 }

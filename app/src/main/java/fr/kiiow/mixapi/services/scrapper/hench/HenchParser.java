@@ -1,40 +1,30 @@
-package fr.kiiow.mixapi.services.scrapper;
+package fr.kiiow.mixapi.services.scrapper.hench;
 
 import fr.kiiow.mixapi.dao.DaoManager;
 import fr.kiiow.mixapi.models.hench.*;
 import fr.kiiow.mixapi.models.world.Item;
 import fr.kiiow.mixapi.models.world.Zone;
 import fr.kiiow.mixapi.services.builder.HenchBuilder;
+import fr.kiiow.mixapi.services.scrapper.AbstractParser;
 import fr.kiiow.mixapi.services.tools.StringTools;
 import lombok.Getter;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.util.*;
 
-public class HenchParser {
+@Getter
+public class HenchParser extends AbstractParser {
 
-    private final static Logger log = LogManager.getLogger();
-
-    private final Document pageToParse;
-
-    private final DaoManager daoManager;
-
-    @Getter
     private final List<Hench> henchParsed;
 
-    @Getter
     private final List<Zone> zoneParsed;
 
-    @Getter
     private final List<HenchMix> henchMixesParsed;
 
     public HenchParser(Document pageToParse, DaoManager daoManger) {
-        this.pageToParse = pageToParse;
-        this.daoManager = daoManger;
+        super(pageToParse, daoManger);
         this.henchParsed = new ArrayList<>();
         this.zoneParsed = new ArrayList<>();
         this.henchMixesParsed = new ArrayList<>();
@@ -118,24 +108,27 @@ public class HenchParser {
         hench.setStats(henchStats);
 
         // Zones
-        List<String> habitats = Arrays.stream(elementSpec.getElementsByClass("one").get(2).expectFirst(".s-value").text().split(",")).map(String::trim).toList();
-        for(String habitat: habitats) {
-            Zone zone;
-            Optional<Zone> zoneExist = zoneParsed.stream().filter(x -> x.getName().equals(habitat)).findFirst();
+        String rawHabitat = elementSpec.getElementsByClass("one").get(2).expectFirst(".s-value").text();
+        if(!rawHabitat.trim().equals("-")) {
+            List<String> habitats = Arrays.stream(rawHabitat.split(",")).map(String::trim).toList();
+            for(String habitat: habitats) {
+                Zone zone;
+                Optional<Zone> zoneExist = zoneParsed.stream().filter(x -> x.getName().equals(habitat)).findFirst();
 
-            if (zoneExist.isEmpty()) {
-                Optional<Zone> zoneDb = this.daoManager.getZoneDao().findByName(habitat);
-                if(zoneDb.isPresent()) {
-                    zone = zoneDb.get();
+                if (zoneExist.isEmpty()) {
+                    Optional<Zone> zoneDb = this.daoManager.getZoneDao().findByName(habitat);
+                    if(zoneDb.isPresent()) {
+                        zone = zoneDb.get();
+                    } else {
+                        zone = new Zone();
+                        zone.setName(habitat);
+                        zoneParsed.add(zone);
+                    }
                 } else {
-                    zone = new Zone();
-                    zone.setName(habitat);
-                    zoneParsed.add(zone);
+                    zone = zoneExist.get();
                 }
-            } else {
-                zone = zoneExist.get();
+                hench.addZone(zone);
             }
-            hench.addZone(zone);
         }
 
         return hench;

@@ -25,8 +25,7 @@ public class SecurityConfigurerAdapter {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(requests -> requests
-                        .requestMatchers("/scrapper/**").authenticated()
-                        .requestMatchers("/auth/**").authenticated()
+                        .requestMatchers("/auth/**", "/scrapper/**").authenticated()
                         .requestMatchers("/**").permitAll()
                 )
                 .httpBasic(Customizer.withDefaults())
