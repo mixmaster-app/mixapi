@@ -1,4 +1,4 @@
-package fr.kiiow.mixapi.services.scrapper;
+package fr.kiiow.mixapi.services.scraper;
 
 import fr.kiiow.mixapi.models.config.Config;
 import org.jsoup.Jsoup;
@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.net.URISyntaxException;
 
-public abstract class AbstractScrapper {
+public abstract class AbstractScraper {
 
     @Autowired
     protected Config config;

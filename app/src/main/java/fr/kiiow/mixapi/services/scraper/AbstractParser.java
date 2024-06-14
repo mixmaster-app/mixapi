@@ -1,4 +1,4 @@
-package fr.kiiow.mixapi.services.scrapper;
+package fr.kiiow.mixapi.services.scraper;
 
 import fr.kiiow.mixapi.dao.DaoManager;
 import lombok.Getter;

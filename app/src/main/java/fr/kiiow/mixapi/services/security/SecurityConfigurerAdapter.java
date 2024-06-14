@@ -30,7 +30,7 @@ public class SecurityConfigurerAdapter {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(requests -> {
                     if(config.isSecurityEnabled()) {
-                        requests.requestMatchers("/auth/**", "/scrapper/**").authenticated();
+                        requests.requestMatchers("/auth/**", "/scraper/**").authenticated();
                     }
                     requests.requestMatchers("/**").permitAll();
                 }

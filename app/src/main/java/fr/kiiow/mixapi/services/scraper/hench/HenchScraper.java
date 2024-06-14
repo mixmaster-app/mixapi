@@ -1,13 +1,13 @@
-package fr.kiiow.mixapi.services.scrapper.hench;
+package fr.kiiow.mixapi.services.scraper.hench;
 
-import fr.kiiow.mixapi.services.scrapper.AbstractScrapper;
+import fr.kiiow.mixapi.services.scraper.AbstractScraper;
 import org.apache.hc.core5.net.URIBuilder;
 import org.springframework.stereotype.Service;
 
 import java.net.URISyntaxException;
 
 @Service
-public class HenchScrapper extends AbstractScrapper {
+public class HenchScraper extends AbstractScraper {
 
     private static final String path = "listedeshenchs.php";
 

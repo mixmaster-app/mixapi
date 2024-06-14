@@ -1,21 +1,21 @@
-package fr.kiiow.mixapi.controllers.scrapper;
+package fr.kiiow.mixapi.controllers.scraper;
 
 import fr.kiiow.mixapi.controllers.AbstractController;
-import fr.kiiow.mixapi.services.scrapper.hench.HenchParser;
-import fr.kiiow.mixapi.services.scrapper.hench.HenchScrapper;
+import fr.kiiow.mixapi.services.scraper.hench.HenchParser;
+import fr.kiiow.mixapi.services.scraper.hench.HenchScraper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class HenchScrapperController extends AbstractController implements IScrapperController {
+public class HenchScraperController extends AbstractController implements IScraperController {
 
     @Autowired
-    private HenchScrapper scrapper;
+    private HenchScraper scraper;
 
     @GetMapping(path = "/henchs")
-    public void launchHenchScrapping() throws Exception {
-        HenchParser parser = new HenchParser(scrapper.getPage(), this.getDaoManager());
+    public void scrapHenchs() throws Exception {
+        HenchParser parser = new HenchParser(scraper.getPage(), this.getDaoManager());
         parser.parseHenchsData();
         this.getDaoManager().getZoneDao().saveAll(parser.getZoneParsed());
         this.getDaoManager().getHenchDao().saveAll(parser.getHenchParsed());

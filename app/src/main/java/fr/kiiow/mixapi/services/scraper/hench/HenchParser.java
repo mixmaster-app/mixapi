@@ -1,11 +1,11 @@
-package fr.kiiow.mixapi.services.scrapper.hench;
+package fr.kiiow.mixapi.services.scraper.hench;
 
 import fr.kiiow.mixapi.dao.DaoManager;
 import fr.kiiow.mixapi.models.hench.*;
 import fr.kiiow.mixapi.models.world.Item;
 import fr.kiiow.mixapi.models.world.Zone;
 import fr.kiiow.mixapi.services.builder.HenchBuilder;
-import fr.kiiow.mixapi.services.scrapper.AbstractParser;
+import fr.kiiow.mixapi.services.scraper.AbstractParser;
 import fr.kiiow.mixapi.services.tools.StringTools;
 import lombok.Getter;
 import org.jsoup.nodes.Document;
