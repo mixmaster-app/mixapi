@@ -50,6 +50,10 @@ public class Hench {
     @JsonProperty(value = "is_questable")
     private boolean isQuestable;
 
+    @Column(name = "drop_rate")
+    @JsonProperty(value = "drop_rate")
+    private Integer dropRate;
+
     @Embedded
     private HenchStats stats;
 
@@ -57,17 +61,18 @@ public class Hench {
     @JoinColumn(name = "type_id")
     private HenchType type;
 
-    @OneToMany
+    @ManyToMany
     @JoinTable(
             name = "hench_zone",
             joinColumns = @JoinColumn(name = "hench_id"),
-            inverseJoinColumns = @JoinColumn(name = "zone_id")
+            inverseJoinColumns = @JoinColumn(name = "zone_id"),
+            uniqueConstraints = { @UniqueConstraint(columnNames = { "hench_id", "zone_id" }) }
     )
     private List<Zone> zones;
 
     @OneToMany(mappedBy = "henchResult")
     @JsonProperty(value = "mix")
-    private List<HenchMix> mix;
+    private List<HenchMix> mixes;
 
     @OneToMany(mappedBy = "henchLeft")
     @JsonIgnore
@@ -82,5 +87,19 @@ public class Hench {
         List<HenchMix> result = new ArrayList<>(evolutionsLeft);
         result.addAll(evolutionsRight);
         return result.stream().sorted(Comparator.comparingInt(HenchMix::getId)).toList();
+    }
+
+    public void addZone(Zone zone) {
+        if(this.zones == null) {
+            this.zones = new ArrayList<>();
+        }
+        this.zones.add(zone);
+    }
+
+    public void addMixes(List<HenchMix> mixes) {
+        if(this.mixes == null) {
+            this.mixes = new ArrayList<>();
+        }
+        this.mixes.addAll(mixes);
     }
 }

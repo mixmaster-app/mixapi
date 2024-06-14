@@ -1,5 +1,8 @@
 # Mixapi
 
+[![](https://github.com/mixmaster-app/mixapi/actions/workflows/docker-build.yml/badge.svg?branch=master)](https://github.com/mixmaster-app/mixapi/actions/workflows/docker-build.yml?query=branch%3Amaster "Latest Release")
+[![](https://img.shields.io/github/release/mixmaster-app/mixapi.svg)](https://github.com/mixmaster-app/mixapi/releases/latest "mixapi latest release")
+
 Unofficial API for the game [mixmaster FR][mixmaster-fr-website].\
 _[wikipedia link][mixmaster-wikipedia]_
 
@@ -20,7 +23,7 @@ spring:
 
 ### 1. Override configuration
 
-All the configuration of the application is present in `./app/srv/main/resources/application.yml`. If you need to edit some of the configuration you can do it in the `application-local.yml` yml file.
+All the configuration of the application is present in `./app/src/main/resources/application.yml`. If you need to edit some of the configuration you can do it in the `application-local.yml` yml file.
 
 By doing so you can override the database connection or add some debugging config lines
 ```yaml
@@ -49,13 +52,14 @@ logging:
 # Run the application
 mvn spring-boot:run
 
-
 # Execute the tests
 mvn test
 
-
 # Build the application
 mvn clean install
+
+# Or if you don't want the test to execute while building the jar
+mvn clean install -DskipTests
 ```
 
 ## Docker
@@ -63,22 +67,24 @@ mvn clean install
 To build the docker image and then launch it we use the following commands
 
 ```shell
-docker build -t kiiow/mixapi:latest .
-docker run -p 0.0.0.0:3000:3000/tcp kiiow/mixapi:latest
+docker build -t mixmaster-app/mixapi:latest .
+docker run -p 0.0.0.0:3000:3000/tcp mixmaster-app/mixapi:latest
 ```
+you can also use existing docker images available on GitHub container registry ([https://ghcr.io][github-container-registry]): [mixapi docker registry][mixapi-docker-registry]
 
 ## Dev environment
 
 To setup your own dev environment you'll need:
 
- - Java SDK 21.x ([Download java][download-java-history])
- - Maven 3.x ([Download maven][download-maven-history])
+- Java SDK 21.x ([Download java][download-java-history])
+- Maven 3.x ([Download maven][download-maven-history])
 
-If you want to set up MySQL locally you can use the `docker\dev\docker-compose.yml` file to do so (On Windows this will require you to [install docker-desktop][docker-desktop-install-docs]).
+If you want to set up MySQL locally you can use the `./docker/dev/docker-compose.yml` file to do so (On Windows this will require you to [install docker-desktop][docker-desktop-install-docs]).
 
-For any configuration changes required you can create an `app\src\main\resources\application-local.yml` file which will override the main `application.yml` configs (cf. **How to ?**).
+For any configuration changes required you can create an `./app/src/main/resources/application-local.yml` file which will override the main `application.yml` configs (cf. **How to ?**).
 
 [mixmaster-data-repository]: https://github.com/mixmaster-app/mixmaster-data
+[mixapi-docker-registry]: https://github.com/mixmaster-app/mixapi/pkgs/container/mixapi
 [mixmaster-fr-website]: https://mixmaster-online.fr/
 [mixmaster-wikipedia]: https://en.wikipedia.org/wiki/Mix_Master
 
@@ -86,3 +92,5 @@ For any configuration changes required you can create an `app\src\main\resources
 [download-maven-history]: https://maven.apache.org/docs/history.html
 [docker-desktop-install-docs]: https://docs.docker.com/desktop/install/windows-install/
 [hibernate-database-init-docs]: https://docs.spring.io/spring-boot/docs/1.1.0.M1/reference/html/howto-database-initialization.html
+
+[github-container-registry]: https://ghcr.io
