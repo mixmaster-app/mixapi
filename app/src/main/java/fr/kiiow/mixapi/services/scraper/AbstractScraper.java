@@ -14,7 +14,7 @@ public abstract class AbstractScraper {
 
     abstract protected String getUrl() throws URISyntaxException;
 
-    public Document getPage() throws Exception{
+    public Document getPage() throws Exception {
         return Jsoup.connect(this.getUrl())
                 .userAgent(config.getWebUserAgent())
                 .maxBodySize(0)
