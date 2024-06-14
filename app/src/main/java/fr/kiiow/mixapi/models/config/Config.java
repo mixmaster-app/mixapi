@@ -14,4 +14,6 @@ public class Config {
     private MixmasterConfig mixmaster;
 
     private String webUserAgent;
+
+    private boolean securityEnabled;
 }

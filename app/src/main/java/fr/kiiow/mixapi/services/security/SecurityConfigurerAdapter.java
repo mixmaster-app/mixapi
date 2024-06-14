@@ -1,5 +1,6 @@
 package fr.kiiow.mixapi.services.security;
 
+import fr.kiiow.mixapi.models.config.Config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,14 +20,20 @@ public class SecurityConfigurerAdapter {
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
 
+    @Autowired
+    private Config config;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.httpBasic(Customizer.withDefaults());
         http
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(requests -> requests
-                        .requestMatchers("/auth/**", "/scrapper/**").authenticated()
-                        .requestMatchers("/**").permitAll()
+                .authorizeHttpRequests(requests -> {
+                    if(config.isSecurityEnabled()) {
+                        requests.requestMatchers("/auth/**", "/scrapper/**").authenticated();
+                    }
+                    requests.requestMatchers("/**").permitAll();
+                }
                 )
                 .httpBasic(Customizer.withDefaults())
                 .formLogin(Customizer.withDefaults())
