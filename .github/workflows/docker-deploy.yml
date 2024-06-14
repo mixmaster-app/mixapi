@@ -16,6 +16,11 @@ jobs:
       - name: 🛒 Checkout
         uses: actions/checkout@v4
 
+      - name: 👷 Set up config
+        run: |
+          mkdir config
+          cp app/src/main/resources/application.yml config
+
       - name: 🚀 Deploy `docker-compose.yml`
         uses: appleboy/scp-action@v0.1.4
         with:
@@ -23,7 +28,7 @@ jobs:
           port: ${{ vars.DEPLOY_SSH_PORT }}
           username: ${{ secrets.DEPLOY_SSH_USERNAME }}
           key: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
-          source: "docker/docker-compose.yml"
+          source: "docker/docker-compose.yml,config/application.yml"
           target: ${{ vars.DEPLOY_SSH_WORKDIR }}
 
   restart-image:
