@@ -28,7 +28,8 @@ public class Guild {
 
     public Guild() { }
 
-    public Guild(Integer id) {
+    public Guild(Integer id, String name) {
         this.id = id;
+        this.name = name;
     }
 }

@@ -33,12 +33,16 @@ public class UserProfileParser extends AbstractParser {
 
         Optional<CharacterType> isCharacterType = this.getDaoManager().getCharacterTypeDao().findByName(userElements[2].trim());
         isCharacterType.ifPresent(user::setCharacterType);
-        String guildLink = userBasics.expectFirst("a").attr("href");
-        String guildId = guildLink.substring(7, guildLink.indexOf(".html"));
+
+        Element guildLink = userBasics.expectFirst("a");
+        String guildLinkHref = guildLink.attr("href");
+        String guildId = guildLinkHref.substring(7, guildLinkHref.indexOf(".html"));
         if(!guildId.isEmpty()) {
             Integer guildRealId = Integer.valueOf(guildId);
             Optional<Guild> isGuild = this.getDaoManager().getGuildDao().findById(guildRealId);
-            isGuild.ifPresentOrElse(user::setGuild, () -> user.setGuild(new Guild(guildRealId)));
+            isGuild.ifPresentOrElse(user::setGuild, () -> {
+                user.setGuild(new Guild(guildRealId, guildLink.text()));
+            });
         }
     }
 }
