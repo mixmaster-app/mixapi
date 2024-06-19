@@ -9,7 +9,7 @@ import org.jsoup.nodes.Document;
 @Getter
 public abstract class AbstractParser {
 
-    protected final static Logger log = LogManager.getLogger();
+    protected final Logger log = LogManager.getLogger();
 
     protected final Document pageToParse;
 

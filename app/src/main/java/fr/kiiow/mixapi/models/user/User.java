@@ -38,8 +38,6 @@ public class User {
     @JsonIgnoreProperties({"users"})
     private Guild guild;
 
-
-
     public boolean isGuilded() {
         return guild != null;
     }

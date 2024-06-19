@@ -1,15 +1,18 @@
 package fr.kiiow.mixapi.services.scraper.user;
 
+import fr.kiiow.mixapi.models.config.Config;
 import fr.kiiow.mixapi.services.scraper.AbstractScraper;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.springframework.stereotype.Service;
 
 import java.net.URISyntaxException;
 
-@Service
 public class UserProfileScraper extends AbstractScraper {
+
+    public UserProfileScraper(Config config) {
+        super(config);
+    }
 
     @Override
     protected String getUrl() {

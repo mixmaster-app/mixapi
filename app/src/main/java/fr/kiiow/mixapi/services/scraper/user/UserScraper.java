@@ -1,11 +1,11 @@
 package fr.kiiow.mixapi.services.scraper.user;
 
+import fr.kiiow.mixapi.models.config.Config;
 import fr.kiiow.mixapi.services.scraper.AbstractScraper;
 import lombok.Getter;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.springframework.stereotype.Service;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -14,12 +14,15 @@ import java.util.List;
 import java.util.Map;
 
 @Getter
-@Service
-public class UserScrapper extends AbstractScraper {
+public class UserScraper extends AbstractScraper {
 
     private static final String path = "views/tableauxclassements.php";
 
     protected List<String> profileIds;
+
+    public UserScraper(Config config) {
+        super(config);
+    }
 
     @Override
     protected String getUrl() throws URISyntaxException {
