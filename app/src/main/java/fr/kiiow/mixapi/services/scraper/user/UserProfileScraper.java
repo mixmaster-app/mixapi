@@ -19,11 +19,10 @@ public class UserProfileScraper extends AbstractScraper {
         throw new RuntimeException("Not implemented");
     }
 
-    // https://mixmaster-online.fr/perso-6622233043748917257.html
     protected String getUrl(String profileId) throws URISyntaxException {
         URIBuilder builder = new URIBuilder();
         builder
-                .setScheme("https")
+                .setScheme(config.getMixmaster().getUrlScheme())
                 .setHost(config.getMixmaster().getBasePath())
                 .setPath("perso-" + profileId + ".html")
         ;
@@ -34,6 +33,7 @@ public class UserProfileScraper extends AbstractScraper {
         return Jsoup.connect(this.getUrl(profileId))
                 .userAgent(config.getWebUserAgent())
                 .maxBodySize(0)
+                .timeout(60000)
                 .get();
     }
 }

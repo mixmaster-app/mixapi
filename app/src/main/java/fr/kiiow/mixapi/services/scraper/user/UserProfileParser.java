@@ -34,21 +34,23 @@ public class UserProfileParser extends AbstractParser {
         Optional<CharacterType> isCharacterType = this.getDaoManager().getCharacterTypeDao().findByName(userElements[2].trim());
         isCharacterType.ifPresent(user::setCharacterType);
 
-//        Element guildLink = userBasics.expectFirst("a");
-//        String guildLinkHref = guildLink.attr("href");
-//        String guildId = guildLinkHref.substring(7, guildLinkHref.indexOf(".html"));
-//        if(!guildId.isEmpty()) {
-//            Integer guildRealId = Integer.valueOf(guildId);
-//            Optional<Guild> isGuild = this.getDaoManager().getGuildDao().findById(guildRealId);
-//            isGuild.ifPresentOrElse(user::setGuild, () -> {
-//                user.setGuild(new Guild(guildRealId, guildLink.text()));
-//            });
-//        }
+        Element guildLink = userBasics.expectFirst("a");
+        String guildLinkHref = guildLink.attr("href");
+        String guildId = guildLinkHref.substring(7, guildLinkHref.indexOf(".html"));
+        if(!guildId.isEmpty()) {
+            Integer guildRealId = Integer.valueOf(guildId);
+            Optional<Guild> isGuild = this.getDaoManager().getGuildDao().findById(guildRealId);
+            isGuild.ifPresentOrElse(user::setGuild, () -> user.setGuild(new Guild(guildRealId, guildLink.text())));
+        }
     }
 
     public void saveUserData() {
         if(this.getUser().isGuilded()) {
-            this.getDaoManager().getGuildDao().save(this.getUser().getGuild());
+            try {
+                this.getDaoManager().getGuildDao().save(this.getUser().getGuild());
+            } catch (Exception e) {
+                log.warn("Error while saving guild, {}", e.getMessage());
+            }
         }
         this.getDaoManager().getUserDao().save(this.getUser());
     }

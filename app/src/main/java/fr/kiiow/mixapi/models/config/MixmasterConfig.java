@@ -7,6 +7,8 @@ import lombok.Setter;
 @Setter
 public class MixmasterConfig {
 
+    private String urlScheme;
+
     private String basePath;
 
 }

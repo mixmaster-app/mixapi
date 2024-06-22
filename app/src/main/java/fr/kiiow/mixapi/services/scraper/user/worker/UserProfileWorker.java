@@ -6,7 +6,7 @@ import fr.kiiow.mixapi.services.scraper.user.UserProfileScraper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class UserProfileWorker implements Runnable {
+public class UserProfileWorker {
 
     protected final Logger log = LogManager.getLogger();
 
@@ -22,15 +22,15 @@ public class UserProfileWorker implements Runnable {
         this.profileId = profileId;
     }
 
-    @Override
-    public void run() {
+    public boolean execute() {
         try {
             UserProfileParser parser = new UserProfileParser(profileId, userProfileScraper.getPage(profileId), daoManager);
             parser.parseUserData();
             parser.saveUserData();
-            log.info("- [{}]", profileId);
         } catch (Exception e) {
             log.error("Error while parsing user profile({}) : {}", profileId, e.getMessage());
+            return false;
         }
+        return true;
     }
 }

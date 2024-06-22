@@ -18,7 +18,7 @@ public class HenchScraper extends AbstractScraper {
     protected String getUrl() throws URISyntaxException {
         URIBuilder builder = new URIBuilder();
         builder
-                .setScheme("https")
+                .setScheme(config.getMixmaster().getUrlScheme())
                 .setHost(config.getMixmaster().getBasePath())
                 .setPath(path)
                 .addParameter("dragon", "1")
