@@ -16,7 +16,7 @@ public class GuildUser {
 
     @EmbeddedId
     @JsonIgnore
-    private GuildUserKey id;
+    private GuildUser_Key id;
 
     @ManyToOne
     @MapsId("userId")

@@ -10,7 +10,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 @Embeddable
-public class GuildUserKey implements Serializable {
+public class GuildUser_Key implements Serializable {
 
     @Column(name = "guild_id")
     private Integer guildId;
