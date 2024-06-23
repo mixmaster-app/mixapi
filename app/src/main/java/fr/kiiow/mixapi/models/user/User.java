@@ -5,7 +5,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import fr.kiiow.mixapi.models.guild.Guild;
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.annotation.LastModifiedDate;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -24,10 +29,12 @@ public class User {
     private Integer level;
 
     @Column(name = "percent")
+    @JsonProperty(value = "level_percent")
     private Float levelPercent;
 
     @ManyToOne
     @JoinColumn(name = "character_type_id")
+    @JsonProperty(value = "character_type")
     private CharacterType characterType;
 
     @ManyToOne
@@ -42,12 +49,16 @@ public class User {
     @OneToMany(mappedBy = "user")
     @JsonProperty(value = "henchs")
     @JsonIgnoreProperties({"user"})
-    List<UserHench> henchs;
+    private List<UserHench> henchs;
 
     @OneToMany(mappedBy = "user")
     @JsonProperty(value = "items")
     @JsonIgnoreProperties({"user"})
-    List<UserItem> items;
+    private List<UserItem> items;
+
+    @Column(name = "last_updated_at")
+    @UpdateTimestamp
+    private LocalDateTime lastUpdatedAt;
 
     public boolean isGuilded() {
         return guild != null;

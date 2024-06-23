@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface IUserDao extends JpaRepository<User, Integer> {
+public interface IUserDao extends JpaRepository<User, String> {
     List<User> findByNicknameIgnoreCaseContains(String nickname);
 }
