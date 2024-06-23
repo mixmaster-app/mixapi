@@ -19,7 +19,7 @@ public class UserController extends AbstractController implements IUserControlle
     }
 
     @GetMapping(path = "/user/{id}")
-    public Optional<User> findOneById(@PathVariable Integer id) {
+    public Optional<User> findOneById(@PathVariable String id) {
         return this.getDaoManager().getUserDao().findById(id);
     }
 

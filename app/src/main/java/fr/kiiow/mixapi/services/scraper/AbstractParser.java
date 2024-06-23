@@ -1,4 +1,4 @@
-package fr.kiiow.mixapi.services.scrapper;
+package fr.kiiow.mixapi.services.scraper;
 
 import fr.kiiow.mixapi.dao.DaoManager;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import org.jsoup.nodes.Document;
 @Getter
 public abstract class AbstractParser {
 
-    protected final static Logger log = LogManager.getLogger();
+    protected final Logger log = LogManager.getLogger();
 
     protected final Document pageToParse;
 

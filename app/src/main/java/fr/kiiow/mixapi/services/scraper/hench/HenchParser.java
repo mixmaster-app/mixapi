@@ -1,11 +1,10 @@
-package fr.kiiow.mixapi.services.scrapper.hench;
+package fr.kiiow.mixapi.services.scraper.hench;
 
 import fr.kiiow.mixapi.dao.DaoManager;
 import fr.kiiow.mixapi.models.hench.*;
 import fr.kiiow.mixapi.models.world.Item;
 import fr.kiiow.mixapi.models.world.Zone;
-import fr.kiiow.mixapi.services.builder.HenchBuilder;
-import fr.kiiow.mixapi.services.scrapper.AbstractParser;
+import fr.kiiow.mixapi.services.scraper.AbstractParser;
 import fr.kiiow.mixapi.services.tools.StringTools;
 import lombok.Getter;
 import org.jsoup.nodes.Document;
@@ -168,14 +167,14 @@ public class HenchParser extends AbstractParser {
             isHenchLeft.ifPresentOrElse(henchMix::setHenchLeft, () -> {
                 Optional<Hench> isHenchParsedLeft = this.henchParsed.stream().filter(x -> x.getId().equals(idHenchLeft)).findFirst();
                 isHenchParsedLeft.ifPresentOrElse(henchMix::setHenchLeft, () -> {
-                    henchMix.setHenchLeft(HenchBuilder.createDefaultHench(idHenchLeft));
+                    henchMix.setHenchLeft(new Hench(idHenchLeft));
                     henchParsed.add(henchMix.getHenchLeft());
                 });
             });
             isHenchRight.ifPresentOrElse(henchMix::setHenchRight, () -> {
                 Optional<Hench> isHenchParsedLeft = this.henchParsed.stream().filter(x -> x.getId().equals(idHenchRight)).findFirst();
                 isHenchParsedLeft.ifPresentOrElse(henchMix::setHenchRight, () -> {
-                    henchMix.setHenchRight(HenchBuilder.createDefaultHench(idHenchRight));
+                    henchMix.setHenchRight(new Hench(idHenchRight));
                     henchParsed.add(henchMix.getHenchRight());
                 });
             });

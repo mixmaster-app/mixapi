@@ -5,18 +5,19 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import fr.kiiow.mixapi.models.user.User;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
 @Entity
-@Table(name = "guild_user")
+@Table(
+        name = "guild_user",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "guild_id"})
+)
 public class GuildUser {
 
     @EmbeddedId
     @JsonIgnore
-    private GuildUserKey id;
+    private GuildUser_Key id;
 
     @ManyToOne
     @MapsId("userId")

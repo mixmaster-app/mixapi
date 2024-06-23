@@ -4,22 +4,22 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import fr.kiiow.mixapi.models.world.Zone;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 @Entity
 @Table(name = "hench")
 public class Hench {
 
     @Id
+    @Column(name = "id")
     private Integer id;
 
+    @Column(name = "name")
     private String name;
 
     @Column(name = "img_url")
@@ -68,6 +68,7 @@ public class Hench {
             inverseJoinColumns = @JoinColumn(name = "zone_id"),
             uniqueConstraints = { @UniqueConstraint(columnNames = { "hench_id", "zone_id" }) }
     )
+    @JsonProperty(value = "zones")
     private List<Zone> zones;
 
     @OneToMany(mappedBy = "henchResult")
@@ -81,6 +82,12 @@ public class Hench {
     @OneToMany(mappedBy = "henchRight")
     @JsonIgnore
     private List<HenchMix> evolutionsRight;
+
+    public Hench() { }
+
+    public Hench(Integer id) {
+        this.id = id;
+    }
 
     @JsonProperty(value = "evolutions")
     public List<HenchMix> getHenchEvolutions() {

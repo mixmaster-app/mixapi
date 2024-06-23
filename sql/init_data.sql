@@ -59,3 +59,14 @@ INSERT INTO `item` (`id`, `name`, `description`, `item_category_id`) VALUES
 	(38, 'FLEUR DE VIE', NULL, 1),
 	(39, 'AME DU TRÉSOR', NULL, 1),
 	(40, 'CŒUR FORT', NULL, 1);
+
+INSERT INTO `mixmaster`.`hench_gender` (`id`, `name`) VALUES
+    (0, 'Femelle'),
+    (1, 'Male');
+
+INSERT INTO `mixmaster`.`hench_nature` (`id`, `name`) VALUES
+    (5, 'Puissant'),
+    (4, 'Vif'),
+    (3, 'Agile'),
+    (2, 'Elemental'),
+    (1, 'Chanceux');

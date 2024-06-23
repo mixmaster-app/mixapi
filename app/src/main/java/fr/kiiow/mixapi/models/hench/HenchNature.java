@@ -1,4 +1,4 @@
-package fr.kiiow.mixapi.models.world;
+package fr.kiiow.mixapi.models.hench;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -8,8 +8,8 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "item_category")
-public class ItemCategory {
+@Table(name = "hench_nature")
+public class HenchNature {
 
     @Id
     @Column(name = "id")
@@ -17,4 +17,5 @@ public class ItemCategory {
 
     @Column(name = "name")
     private String name;
+
 }

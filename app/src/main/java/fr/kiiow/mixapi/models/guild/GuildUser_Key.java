@@ -2,21 +2,19 @@ package fr.kiiow.mixapi.models.guild;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.io.Serializable;
 
-@Getter
-@Setter
+@Data
 @Embeddable
-public class GuildUserKey implements Serializable {
+public class GuildUser_Key implements Serializable {
 
     @Column(name = "guild_id")
     private Integer guildId;
 
     @Column(name = "user_id")
-    private Integer userId;
+    private String userId;
 
     @Override
     public boolean equals(Object obj) {

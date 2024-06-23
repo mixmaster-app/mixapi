@@ -3,13 +3,11 @@ package fr.kiiow.mixapi.models.guild;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 @Entity
 @Table(name = "guild")
 public class Guild {
@@ -25,4 +23,11 @@ public class Guild {
     @JsonProperty(value = "users")
     @JsonIgnoreProperties({"guild"})
     private List<GuildUser> users;
+
+    public Guild() { }
+
+    public Guild(Integer id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 }
