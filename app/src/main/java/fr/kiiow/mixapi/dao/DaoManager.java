@@ -6,6 +6,7 @@ import fr.kiiow.mixapi.dao.security.IAuthenticationUserDao;
 import fr.kiiow.mixapi.dao.user.ICharacterTypeDao;
 import fr.kiiow.mixapi.dao.user.IUserDao;
 import fr.kiiow.mixapi.dao.user.IUserHenchDao;
+import fr.kiiow.mixapi.dao.user.IUserItemDao;
 import fr.kiiow.mixapi.dao.world.IItemDao;
 import fr.kiiow.mixapi.dao.world.IZoneDao;
 import lombok.Getter;
@@ -45,6 +46,9 @@ public class DaoManager {
 
     @Autowired
     private IUserHenchDao userHenchDao;
+
+    @Autowired
+    private IUserItemDao userItemDao;
 
     @Autowired
     private IGuildDao guildDao;

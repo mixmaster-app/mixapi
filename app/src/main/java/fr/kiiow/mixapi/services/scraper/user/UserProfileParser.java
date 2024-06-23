@@ -8,6 +8,8 @@ import fr.kiiow.mixapi.models.hench.HenchNature;
 import fr.kiiow.mixapi.models.user.CharacterType;
 import fr.kiiow.mixapi.models.user.User;
 import fr.kiiow.mixapi.models.user.UserHench;
+import fr.kiiow.mixapi.models.user.UserItem;
+import fr.kiiow.mixapi.models.world.Item;
 import fr.kiiow.mixapi.services.scraper.AbstractParser;
 import lombok.Getter;
 import org.jsoup.nodes.Document;
@@ -71,11 +73,25 @@ public class UserProfileParser extends AbstractParser {
 
                 user.addHench(hench);
             } catch (Exception e) {
-                log.warn("Error, {}", e.getMessage());
+                log.warn("Error while parsing hench, {}", e.getMessage());
             }
         }
 
         // Item
+        for(Element itemToParse : pageToParse.expectFirst(".items").children()) {
+            try {
+                UserItem item = new UserItem();
+                item.setUser(user);
+                item.setQuantity(Integer.valueOf(itemToParse.expectFirst(".img .number").text().replace("x", "")));
+                // TODO: Change findByName with a findById using img id, once the item scraper is done
+                Optional<Item> isItem = this.daoManager.getItemDao().findByName(itemToParse.expectFirst(".info h2").text());
+                isItem.ifPresent(item::setItem);
+
+                user.addItem(item);
+            } catch (Exception e) {
+                log.warn("Error while parsing item, {}", e.getMessage());
+            }
+        }
 
     }
 
@@ -88,6 +104,7 @@ public class UserProfileParser extends AbstractParser {
             }
         }
         this.getDaoManager().getUserHenchDao().saveAll(this.getUser().getHenchs());
+        this.getDaoManager().getUserItemDao().saveAll(this.getUser().getItems());
         this.getDaoManager().getUserDao().save(this.getUser());
     }
 }
