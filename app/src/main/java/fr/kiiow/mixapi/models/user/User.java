@@ -8,6 +8,7 @@ import lombok.Data;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -59,5 +60,15 @@ public class User {
 
     public boolean isGuilded() {
         return guild != null;
+    }
+
+    public void addHench(UserHench hench) {
+        if(this.henchs == null) this.henchs = new ArrayList<>();
+        this.henchs.add(hench);
+    }
+
+    public void addItem(UserItem item) {
+        if(this.items == null) this.items = new ArrayList<>();
+        this.items.add(item);
     }
 }

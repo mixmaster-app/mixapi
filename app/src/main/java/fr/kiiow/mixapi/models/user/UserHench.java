@@ -33,15 +33,15 @@ public class UserHench {
 
     @Column(name = "maximum_level")
     @JsonProperty(value = "maximum_level")
-    private Integer maxLevel;
+    private Integer maximumLevel;
 
     @ManyToOne
     @JoinColumn(name = "hench_nature_id")
     @JsonProperty(value = "nature")
-    private HenchNature henchNature;
+    private HenchNature nature;
 
     @ManyToOne
     @JoinColumn(name = "hench_gender_id")
     @JsonProperty(value = "gender")
-    private HenchGender henchGender;
+    private HenchGender gender;
 }

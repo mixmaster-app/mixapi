@@ -2,8 +2,12 @@ package fr.kiiow.mixapi.services.scraper.user;
 
 import fr.kiiow.mixapi.dao.DaoManager;
 import fr.kiiow.mixapi.models.guild.Guild;
+import fr.kiiow.mixapi.models.hench.Hench;
+import fr.kiiow.mixapi.models.hench.HenchGender;
+import fr.kiiow.mixapi.models.hench.HenchNature;
 import fr.kiiow.mixapi.models.user.CharacterType;
 import fr.kiiow.mixapi.models.user.User;
+import fr.kiiow.mixapi.models.user.UserHench;
 import fr.kiiow.mixapi.services.scraper.AbstractParser;
 import lombok.Getter;
 import org.jsoup.nodes.Document;
@@ -34,6 +38,7 @@ public class UserProfileParser extends AbstractParser {
         Optional<CharacterType> isCharacterType = this.getDaoManager().getCharacterTypeDao().findByName(userElements[2].trim());
         isCharacterType.ifPresent(user::setCharacterType);
 
+        // Guild
         Element guildLink = userBasics.expectFirst("a");
         String guildLinkHref = guildLink.attr("href");
         String guildId = guildLinkHref.substring(7, guildLinkHref.indexOf(".html"));
@@ -42,6 +47,36 @@ public class UserProfileParser extends AbstractParser {
             Optional<Guild> isGuild = this.getDaoManager().getGuildDao().findById(guildRealId);
             isGuild.ifPresentOrElse(user::setGuild, () -> user.setGuild(new Guild(guildRealId, guildLink.text())));
         }
+
+        // Hench
+        for(Element henchToParse : pageToParse.expectFirst(".henchs").children()) {
+            try {
+                UserHench hench = new UserHench();
+                hench.setUser(user);
+
+                Optional<Hench> isHench = this.daoManager.getHenchDao().findById(Integer.valueOf(henchToParse.attr("id").replace("-recap", "")));
+                isHench.ifPresent(hench::setHench);
+                String[] henchLevels = henchToParse.expectFirst(".niv").text().substring(6).split(" - ");
+                hench.setLevel(Integer.valueOf(henchLevels[0].trim()));
+                hench.setMaximumLevel(Integer.valueOf(henchLevels[1].trim()));
+
+                String henchInfo = henchToParse.expectFirst("h2").text();
+                String[] henchNatureAndGender = henchInfo.substring(henchInfo.indexOf("(") + 1, henchInfo.length() - 1).trim().split(" - ");
+
+                Optional<HenchNature> isHenchNature = this.daoManager.getHenchNatureDao().findByName(henchNatureAndGender[0]);
+                Optional<HenchGender> isHenchGender = this.daoManager.getHenchGenderDao().findByName(henchNatureAndGender[1]);
+
+                isHenchNature.ifPresent(hench::setNature);
+                isHenchGender.ifPresent(hench::setGender);
+
+                user.addHench(hench);
+            } catch (Exception e) {
+                log.warn("Error, {}", e.getMessage());
+            }
+        }
+
+        // Item
+
     }
 
     public void saveUserData() {
@@ -52,6 +87,7 @@ public class UserProfileParser extends AbstractParser {
                 log.warn("Error while saving guild, {}", e.getMessage());
             }
         }
+        this.getDaoManager().getUserHenchDao().saveAll(this.getUser().getHenchs());
         this.getDaoManager().getUserDao().save(this.getUser());
     }
 }
