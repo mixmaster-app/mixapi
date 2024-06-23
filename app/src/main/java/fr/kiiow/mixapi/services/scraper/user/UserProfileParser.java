@@ -78,18 +78,20 @@ public class UserProfileParser extends AbstractParser {
         }
 
         // Item
-        for(Element itemToParse : pageToParse.expectFirst(".items").children()) {
-            try {
-                UserItem item = new UserItem();
-                item.setUser(user);
-                item.setQuantity(Integer.valueOf(itemToParse.expectFirst(".img .number").text().replace("x", "")));
-                // TODO: Change findByName with a findById using img id, once the item scraper is done
-                Optional<Item> isItem = this.daoManager.getItemDao().findByName(itemToParse.expectFirst(".info h2").text());
-                isItem.ifPresent(item::setItem);
+        if(pageToParse.is(".items")) {
+            for(Element itemToParse : pageToParse.expectFirst(".items").children()) {
+                try {
+                    UserItem item = new UserItem();
+                    item.setUser(user);
+                    item.setQuantity(Integer.valueOf(itemToParse.expectFirst(".img .number").text().replace("x", "")));
+                    // TODO: Change findByName with a findById using img id, once the item scraper is done
+                    Optional<Item> isItem = this.daoManager.getItemDao().findByName(itemToParse.expectFirst(".info h2").text());
+                    isItem.ifPresent(item::setItem);
 
-                user.addItem(item);
-            } catch (Exception e) {
-                log.warn("Error while parsing item, {}", e.getMessage());
+                    user.addItem(item);
+                } catch (Exception e) {
+                    log.warn("Error while parsing item, {}", e.getMessage());
+                }
             }
         }
 
@@ -103,8 +105,15 @@ public class UserProfileParser extends AbstractParser {
                 log.warn("Error while saving guild, {}", e.getMessage());
             }
         }
-        this.getDaoManager().getUserHenchDao().saveAll(this.getUser().getHenchs());
-        this.getDaoManager().getUserItemDao().saveAll(this.getUser().getItems());
+        this.getDaoManager().getUserHenchDao().deleteAll();
+        this.getDaoManager().getUserItemDao().deleteAll();
+
+        if(this.getUser().getHenchs() != null) {
+            this.getDaoManager().getUserHenchDao().saveAll(this.getUser().getHenchs());
+        }
+        if(this.getUser().getItems() != null) {
+            this.getDaoManager().getUserItemDao().saveAll(this.getUser().getItems());
+        }
         this.getDaoManager().getUserDao().save(this.getUser());
     }
 }
