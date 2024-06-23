@@ -1,10 +1,8 @@
 package fr.kiiow.mixapi.models.hench;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
 public class HenchStats {
 
     private Integer hp;

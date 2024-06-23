@@ -19,7 +19,7 @@ public class UserHench {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    @JsonIgnoreProperties({"userHenchs"})
+    @JsonIgnoreProperties({"henchs"})
     private User user;
 
     @ManyToOne

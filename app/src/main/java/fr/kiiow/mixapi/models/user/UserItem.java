@@ -17,7 +17,7 @@ public class UserItem {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    @JsonIgnoreProperties({"userItems"})
+    @JsonIgnoreProperties({"items"})
     private User user;
 
     @ManyToOne

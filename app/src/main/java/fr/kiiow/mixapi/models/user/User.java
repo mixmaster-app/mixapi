@@ -4,13 +4,11 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import fr.kiiow.mixapi.models.guild.Guild;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 @Entity
 @Table(name = "user")
 public class User {
@@ -44,12 +42,12 @@ public class User {
     @OneToMany(mappedBy = "user")
     @JsonProperty(value = "henchs")
     @JsonIgnoreProperties({"user"})
-    List<UserHench> userHenchs;
+    List<UserHench> henchs;
 
     @OneToMany(mappedBy = "user")
     @JsonProperty(value = "items")
     @JsonIgnoreProperties({"user"})
-    List<UserItem> userItems;
+    List<UserItem> items;
 
     public boolean isGuilded() {
         return guild != null;
