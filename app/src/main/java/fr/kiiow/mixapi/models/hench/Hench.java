@@ -1,6 +1,7 @@
 package fr.kiiow.mixapi.models.hench;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import fr.kiiow.mixapi.models.world.Zone;
 import jakarta.persistence.*;
@@ -65,10 +66,10 @@ public class Hench {
     @JoinTable(
             name = "hench_zone",
             joinColumns = @JoinColumn(name = "hench_id"),
-            inverseJoinColumns = @JoinColumn(name = "zone_id"),
-            uniqueConstraints = { @UniqueConstraint(columnNames = { "hench_id", "zone_id" }) }
+            inverseJoinColumns = @JoinColumn(name = "zone_id")
     )
     @JsonProperty(value = "zones")
+    @JsonIgnoreProperties({"henchs"})
     private List<Zone> zones;
 
     @OneToMany(mappedBy = "henchResult")
