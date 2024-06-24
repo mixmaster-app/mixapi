@@ -8,7 +8,7 @@ import java.net.URISyntaxException;
 
 public class ItemScraper extends AbstractScraper {
 
-    private static final String path = "tutodivers-oudroperitem.html";
+    private static final String path = "views/tutodivers.php";
 
     public ItemScraper(Config config) {
         super(config);
@@ -21,6 +21,7 @@ public class ItemScraper extends AbstractScraper {
                 .setScheme(config.getMixmaster().getUrlScheme())
                 .setHost(config.getMixmaster().getBasePath())
                 .setPath(path)
+                .addParameter("quete", "oudroperitem")
         ;
         return builder.build().toString();
     }

@@ -93,6 +93,8 @@ public class UserProfileParser extends AbstractParser {
                     log.warn("Error while parsing item, {}", e.getMessage());
                 }
             }
+        } else {
+            log.info("eh no items on this one");
         }
 
     }
@@ -105,15 +107,16 @@ public class UserProfileParser extends AbstractParser {
                 log.warn("Error while saving guild, {}", e.getMessage());
             }
         }
-        this.getDaoManager().getUserHenchDao().deleteAll();
-        this.getDaoManager().getUserItemDao().deleteAll();
+        this.getDaoManager().getUserDao().save(user);
+
+        this.getDaoManager().getUserHenchDao().deleteAllByUser(user);
+        this.getDaoManager().getUserItemDao().deleteAllByUser(user);
 
         if(this.getUser().getHenchs() != null) {
-            this.getDaoManager().getUserHenchDao().saveAll(this.getUser().getHenchs());
+            this.getDaoManager().getUserHenchDao().saveAll(user.getHenchs());
         }
         if(this.getUser().getItems() != null) {
-            this.getDaoManager().getUserItemDao().saveAll(this.getUser().getItems());
+            this.getDaoManager().getUserItemDao().saveAll(user.getItems());
         }
-        this.getDaoManager().getUserDao().save(this.getUser());
     }
 }

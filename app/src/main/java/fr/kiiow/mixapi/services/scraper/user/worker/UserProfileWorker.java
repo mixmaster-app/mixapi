@@ -28,6 +28,7 @@ public class UserProfileWorker {
             parser.parseUserData();
             parser.saveUserData();
         } catch (Exception e) {
+            e.printStackTrace();
             log.error("Error while parsing user profile({}) : {}", profileId, e.getMessage());
             return false;
         }

@@ -134,7 +134,6 @@ public class HenchParser extends AbstractParser {
     }
 
     protected List<HenchMix> parseHenchMix(Element henchDom, Hench result) {
-        // TODO: verify if the mix doesn't already exist in the DB
         List<HenchMix> mixes = new ArrayList<>();
 
         Element elementSpec = henchDom.expectFirst(".modal .stat .spec");
