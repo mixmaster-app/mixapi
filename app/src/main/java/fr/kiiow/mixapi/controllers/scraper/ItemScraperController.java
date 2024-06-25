@@ -15,6 +15,8 @@ public class ItemScraperController extends AbstractController implements IScrape
         try {
             ItemParser parser = new ItemParser(itemScraper.getPage(), this.getDaoManager());
             parser.parseItems();
+            this.getDaoManager().getItemDao().saveAll(parser.getItemParsed());
+            this.getDaoManager().getHenchLootsDao().saveAll(parser.getHenchLootParsed());
         } catch (Exception e) {
             log.error("Error, {}", e.getMessage());
         }

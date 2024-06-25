@@ -19,22 +19,6 @@ INSERT INTO `item_category` (`id`, `name`) VALUES
 	(2, 'craft');
 
 INSERT INTO `item` (`id`, `name`, `description`, `item_category_id`) VALUES
-	(1, 'ECAILLE DE DRAGON', NULL, 1),
-	(2, 'AILE DE CHAUVE-SOURIS', NULL, 1),
-	(3, 'DENT AIGUISÉE', NULL, 1),
-	(4, 'COLONNE DE VENT', NULL, 1),
-	(5, 'DOUCE SÈVE', NULL, 1),
-	(6, 'AILE DE VIE', NULL, 1),
-	(7, 'BAGUETTE MAGIQUE MYSTIQUE', NULL, 1),
-	(8, 'MÉTAL ROUGE', NULL, 1),
-	(9, 'BIJOU DE DRAGON', NULL, 1),
-	(10, 'CONTRAT DÉMONIAQUE', NULL, 1),
-	(11, 'SYMBOLE ANIMAL', NULL, 1),
-	(12, 'VENT DE CRISTAL', NULL, 1),
-	(13, 'CARAPACE ARC-EN-CIEL', NULL, 1),
-	(14, 'FEUILLE DE VIE', NULL, 1),
-	(15, 'CRISTAL DU CHAOS', NULL, 1),
-	(16, 'CLÉ DE LA MACHINE DE VIE', NULL, 1),
 	(17, 'SANG DE DRAGON', NULL, 1),
 	(18, 'TOUCHER DÉMONIAQUE', NULL, 1),
 	(19, 'COEUR VIGOUREUX', NULL, 1),

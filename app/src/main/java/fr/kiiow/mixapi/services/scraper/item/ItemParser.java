@@ -1,10 +1,9 @@
 package fr.kiiow.mixapi.services.scraper.item;
 
 import fr.kiiow.mixapi.dao.DaoManager;
-import fr.kiiow.mixapi.models.hench.Hench;
 import fr.kiiow.mixapi.models.hench.HenchLoots;
+import fr.kiiow.mixapi.models.hench.HenchZone;
 import fr.kiiow.mixapi.models.world.Item;
-import fr.kiiow.mixapi.models.world.Zone;
 import fr.kiiow.mixapi.services.scraper.AbstractParser;
 import lombok.Getter;
 import org.jsoup.nodes.Document;
@@ -13,7 +12,6 @@ import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Getter
 public class ItemParser extends AbstractParser {
@@ -55,28 +53,28 @@ public class ItemParser extends AbstractParser {
     protected List<HenchLoots> parseHenchLoot(Element itemDom, Item item) {
         List<HenchLoots> henchLootingItem = new ArrayList<>();
 
-        String henchName, zoneName;
         try {
             Elements henchDropList = itemDom.getElementsByClass("bulletauxdedrop");
-            log.info("Found {} hench looting the item {} ({})", henchDropList.size(), item.getName(), item.getId());
             for(Element henchLooting : henchDropList) {
-                HenchLoots henchLoots = new HenchLoots();
-                henchLoots.setItem(item);
-
                 String textContent = henchLooting.text();
-                henchName = textContent.split("[ (]")[0].trim();
-                zoneName = textContent.substring(textContent.indexOf("(") + 1, textContent.indexOf(")"));
+                String henchName = textContent.split("[ (]")[0].trim();
+                String zoneName = textContent.substring(textContent.indexOf("(") + 1, textContent.indexOf(")"));
+                Integer lootRate = Integer.valueOf(textContent.substring(textContent.indexOf("sur cette map: ") + 15));
 
-                Optional<Hench> isHench = this.getDaoManager().getHenchDao().findByNameEquals(henchName);
-                Optional<Zone> isZone = this.getDaoManager().getZoneDao().findByName(zoneName);
+                List<HenchZone> henchsByZone = this.getDaoManager().getHenchZoneDao().findByHenchNameAndZoneName(henchName, zoneName);
 
-                isHench.ifPresent(henchLoots::setHench);
-                isZone.ifPresent(henchLoots::setZone);
-                henchLootingItem.add(henchLoots);
+                for(HenchZone henchByZone : henchsByZone) {
+                    HenchLoots henchLoots = new HenchLoots();
+
+                    henchLoots.setHench(henchByZone.getHench());
+                    henchLoots.setItem(item);
+                    henchLoots.setZone(henchByZone.getZone());
+                    henchLoots.setLootRate(lootRate);
+
+                    henchLootingItem.add(henchLoots);
+                }
             }
         } catch (Exception e) {
-            // TODO: some hench have the same name, the query need to be done on the hench_zone table => if multiple hench in the same zone returned, add all of them
-            e.printStackTrace();
             log.error("Error parsing hench looting item, {}", e.getMessage());
         }
 
