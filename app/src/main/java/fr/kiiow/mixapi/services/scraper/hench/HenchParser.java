@@ -181,7 +181,7 @@ public class HenchParser extends AbstractParser {
             isItemRight.ifPresent(henchMix::setItemRight);
 
             // if the mix doesn't exist add it to the mixes
-            if(!this.daoManager.getHenchMixDao().existsByHenchResultIdAndItemLeftIdAndHenchLeftIdAndItemRightIdAndHenchRightId(
+            if (!this.daoManager.getHenchMixDao().existsByHenchResultIdAndItemLeftIdAndHenchLeftIdAndItemRightIdAndHenchRightId(
                     henchMix.getHenchResult().getId(),
                     Optional.ofNullable(henchMix.getItemLeft())
                             .map(Item::getId)

@@ -54,29 +54,31 @@ public class UserProfileParser extends AbstractParser {
         }
 
         // Hench
-        for(Element henchToParse : userFile.expectFirst(".henchs").children()) {
-            try {
-                UserHench hench = new UserHench();
-                hench.setUser(user);
+        if(!userFile.getElementsByClass("henchs").isEmpty()) {
+            for (Element henchToParse : userFile.expectFirst(".henchs").children()) {
+                try {
+                    UserHench hench = new UserHench();
+                    hench.setUser(user);
 
-                Optional<Hench> isHench = this.daoManager.getHenchDao().findById(Integer.valueOf(henchToParse.attr("id").replace("-recap", "")));
-                isHench.ifPresent(hench::setHench);
-                String[] henchLevels = henchToParse.expectFirst(".niv").text().substring(6).split(" - ");
-                hench.setLevel(Integer.valueOf(henchLevels[0].trim()));
-                hench.setMaximumLevel(Integer.valueOf(henchLevels[1].trim()));
+                    Optional<Hench> isHench = this.daoManager.getHenchDao().findById(Integer.valueOf(henchToParse.attr("id").replace("-recap", "")));
+                    isHench.ifPresent(hench::setHench);
+                    String[] henchLevels = henchToParse.expectFirst(".niv").text().substring(6).split(" - ");
+                    hench.setLevel(Integer.valueOf(henchLevels[0].trim()));
+                    hench.setMaximumLevel(Integer.valueOf(henchLevels[1].trim()));
 
-                String henchInfo = henchToParse.expectFirst("h2").text();
-                String[] henchNatureAndGender = henchInfo.substring(henchInfo.indexOf("(") + 1, henchInfo.length() - 1).trim().split(" - ");
+                    String henchInfo = henchToParse.expectFirst("h2").text();
+                    String[] henchNatureAndGender = henchInfo.substring(henchInfo.indexOf("(") + 1, henchInfo.length() - 1).trim().split(" - ");
 
-                Optional<HenchNature> isHenchNature = this.daoManager.getHenchNatureDao().findByName(henchNatureAndGender[0]);
-                Optional<HenchGender> isHenchGender = this.daoManager.getHenchGenderDao().findByName(henchNatureAndGender[1]);
+                    Optional<HenchNature> isHenchNature = this.daoManager.getHenchNatureDao().findByName(henchNatureAndGender[0]);
+                    Optional<HenchGender> isHenchGender = this.daoManager.getHenchGenderDao().findByName(henchNatureAndGender[1]);
 
-                isHenchNature.ifPresent(hench::setNature);
-                isHenchGender.ifPresent(hench::setGender);
+                    isHenchNature.ifPresent(hench::setNature);
+                    isHenchGender.ifPresent(hench::setGender);
 
-                user.addHench(hench);
-            } catch (Exception e) {
-                log.warn("Error while parsing hench, {}", e.getMessage());
+                    user.addHench(hench);
+                } catch (Exception e) {
+                    log.warn("Error while parsing hench, {}", e.getMessage());
+                }
             }
         }
 
@@ -107,8 +109,6 @@ public class UserProfileParser extends AbstractParser {
                     log.warn("Error while parsing item, {}", e.getMessage());
                 }
             }
-        } else {
-            log.info("eh no items on this one");
         }
 
     }

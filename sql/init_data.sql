@@ -34,15 +34,7 @@ INSERT INTO `item` (`id`, `name`, `description`, `item_category_id`) VALUES
 	(29, 'ITEM NIVEAU 4 INSECTE', NULL, 1),
 	(30, 'ITEM NIVEAU 4 PLANTE', NULL, 1),
 	(31, 'ITEM NIVEAU 4 MYSTÈRE', NULL, 1),
-	(32, 'ITEM NIVEAU 4 MÉTAL', NULL, 1),
-	(33, 'DRAGON FLAMBOYANT', NULL, 1),
-	(34, 'LIVRE MAGIQUE DES TÉNÈBRES', NULL, 1),
-	(35, 'CORNE DE LICORNE', NULL, 1),
-	(36, 'AILE D\'ANGE', NULL, 1),
-	(37, 'INSECTE FOSSILISÉ', NULL, 1),
-	(38, 'FLEUR DE VIE', NULL, 1),
-	(39, 'AME DU TRÉSOR', NULL, 1),
-	(40, 'CŒUR FORT', NULL, 1);
+	(32, 'ITEM NIVEAU 4 MÉTAL', NULL, 1);
 
 INSERT INTO `mixmaster`.`hench_gender` (`id`, `name`) VALUES
     (0, 'Femelle'),
