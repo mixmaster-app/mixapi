@@ -15,6 +15,8 @@ import lombok.Getter;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Getter
@@ -29,7 +31,8 @@ public class UserProfileParser extends AbstractParser {
     }
 
     public void parseUserData() {
-        Element userBasics = pageToParse.expectFirst(".contenu_ficheperso .titres");
+        Element userFile = pageToParse.expectFirst(".contenu_ficheperso");
+        Element userBasics = userFile.expectFirst(".titres");
 
         // Basics
         String[] userElements = userBasics.text().split(" - ");
@@ -51,7 +54,7 @@ public class UserProfileParser extends AbstractParser {
         }
 
         // Hench
-        for(Element henchToParse : pageToParse.expectFirst(".henchs").children()) {
+        for(Element henchToParse : userFile.expectFirst(".henchs").children()) {
             try {
                 UserHench hench = new UserHench();
                 hench.setUser(user);
@@ -78,15 +81,26 @@ public class UserProfileParser extends AbstractParser {
         }
 
         // Item
-        if(pageToParse.is(".items")) {
-            for(Element itemToParse : pageToParse.expectFirst(".items").children()) {
+        if(!userFile.getElementsByClass("items").isEmpty()) {
+            for(Element itemToParse : userFile.expectFirst(".items").children()) {
                 try {
                     UserItem item = new UserItem();
                     item.setUser(user);
                     item.setQuantity(Integer.valueOf(itemToParse.expectFirst(".img .number").text().replace("x", "")));
-                    // TODO: Change findByName with a findById using img id, once the item scraper is done
-                    Optional<Item> isItem = this.daoManager.getItemDao().findByName(itemToParse.expectFirst(".info h2").text());
-                    isItem.ifPresent(item::setItem);
+
+                    String itemImageUrl = itemToParse.expectFirst(".img img").attr("src");
+                    String itemId = itemImageUrl.substring(10, itemImageUrl.length() - 4);
+                    String itemName = itemToParse.expectFirst(".info h2").text();
+
+                    if(!itemId.equals("defaut")) {
+                        Optional<Item> isItem = this.daoManager.getItemDao().findById(Integer.valueOf(itemId));
+                        isItem.ifPresentOrElse(item::setItem, () -> {
+                            Item a = new Item();
+                            a.setId(Integer.valueOf(itemId));
+                            a.setName(itemName);
+                            item.setItem(a);
+                        });
+                    }
 
                     user.addItem(item);
                 } catch (Exception e) {
@@ -109,13 +123,20 @@ public class UserProfileParser extends AbstractParser {
         }
         this.getDaoManager().getUserDao().save(user);
 
-        this.getDaoManager().getUserHenchDao().deleteAllByUser(user);
-        this.getDaoManager().getUserItemDao().deleteAllByUser(user);
+        this.getDaoManager().getUserHenchDao().deleteByUserId(user.getId());
+        this.getDaoManager().getUserItemDao().deleteByUserId(user.getId());
 
         if(this.getUser().getHenchs() != null) {
             this.getDaoManager().getUserHenchDao().saveAll(user.getHenchs());
         }
         if(this.getUser().getItems() != null) {
+            List<Item> items = user.getItems().stream().map(x -> {
+                if(x.getItem() != null) {
+                    return x.getItem();
+                }
+                return null;
+            }).filter(Objects::nonNull).toList();
+            this.getDaoManager().getItemDao().saveAll(items);
             this.getDaoManager().getUserItemDao().saveAll(user.getItems());
         }
     }
