@@ -134,7 +134,6 @@ public class HenchParser extends AbstractParser {
     }
 
     protected List<HenchMix> parseHenchMix(Element henchDom, Hench result) {
-        // TODO: verify if the mix doesn't already exist in the DB
         List<HenchMix> mixes = new ArrayList<>();
 
         Element elementSpec = henchDom.expectFirst(".modal .stat .spec");
@@ -182,7 +181,7 @@ public class HenchParser extends AbstractParser {
             isItemRight.ifPresent(henchMix::setItemRight);
 
             // if the mix doesn't exist add it to the mixes
-            if(!this.daoManager.getHenchMixDao().existsByHenchResultIdAndItemLeftIdAndHenchLeftIdAndItemRightIdAndHenchRightId(
+            if (!this.daoManager.getHenchMixDao().existsByHenchResultIdAndItemLeftIdAndHenchLeftIdAndItemRightIdAndHenchRightId(
                     henchMix.getHenchResult().getId(),
                     Optional.ofNullable(henchMix.getItemLeft())
                             .map(Item::getId)

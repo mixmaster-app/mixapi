@@ -39,6 +39,12 @@ public class DaoManager {
     private IHenchTypeDao henchTypeDao;
 
     @Autowired
+    private IHenchLootsDao henchLootsDao;
+
+    @Autowired
+    private IHenchZoneDao henchZoneDao;
+
+    @Autowired
     private IUserDao userDao;
 
     @Autowired

@@ -15,6 +15,8 @@ import lombok.Getter;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Getter
@@ -29,7 +31,8 @@ public class UserProfileParser extends AbstractParser {
     }
 
     public void parseUserData() {
-        Element userBasics = pageToParse.expectFirst(".contenu_ficheperso .titres");
+        Element userFile = pageToParse.expectFirst(".contenu_ficheperso");
+        Element userBasics = userFile.expectFirst(".titres");
 
         // Basics
         String[] userElements = userBasics.text().split(" - ");
@@ -51,42 +54,55 @@ public class UserProfileParser extends AbstractParser {
         }
 
         // Hench
-        for(Element henchToParse : pageToParse.expectFirst(".henchs").children()) {
-            try {
-                UserHench hench = new UserHench();
-                hench.setUser(user);
+        if(!userFile.getElementsByClass("henchs").isEmpty()) {
+            for (Element henchToParse : userFile.expectFirst(".henchs").children()) {
+                try {
+                    UserHench hench = new UserHench();
+                    hench.setUser(user);
 
-                Optional<Hench> isHench = this.daoManager.getHenchDao().findById(Integer.valueOf(henchToParse.attr("id").replace("-recap", "")));
-                isHench.ifPresent(hench::setHench);
-                String[] henchLevels = henchToParse.expectFirst(".niv").text().substring(6).split(" - ");
-                hench.setLevel(Integer.valueOf(henchLevels[0].trim()));
-                hench.setMaximumLevel(Integer.valueOf(henchLevels[1].trim()));
+                    Optional<Hench> isHench = this.daoManager.getHenchDao().findById(Integer.valueOf(henchToParse.attr("id").replace("-recap", "")));
+                    isHench.ifPresent(hench::setHench);
+                    String[] henchLevels = henchToParse.expectFirst(".niv").text().substring(6).split(" - ");
+                    hench.setLevel(Integer.valueOf(henchLevels[0].trim()));
+                    hench.setMaximumLevel(Integer.valueOf(henchLevels[1].trim()));
 
-                String henchInfo = henchToParse.expectFirst("h2").text();
-                String[] henchNatureAndGender = henchInfo.substring(henchInfo.indexOf("(") + 1, henchInfo.length() - 1).trim().split(" - ");
+                    String henchInfo = henchToParse.expectFirst("h2").text();
+                    String[] henchNatureAndGender = henchInfo.substring(henchInfo.indexOf("(") + 1, henchInfo.length() - 1).trim().split(" - ");
 
-                Optional<HenchNature> isHenchNature = this.daoManager.getHenchNatureDao().findByName(henchNatureAndGender[0]);
-                Optional<HenchGender> isHenchGender = this.daoManager.getHenchGenderDao().findByName(henchNatureAndGender[1]);
+                    Optional<HenchNature> isHenchNature = this.daoManager.getHenchNatureDao().findByName(henchNatureAndGender[0]);
+                    Optional<HenchGender> isHenchGender = this.daoManager.getHenchGenderDao().findByName(henchNatureAndGender[1]);
 
-                isHenchNature.ifPresent(hench::setNature);
-                isHenchGender.ifPresent(hench::setGender);
+                    isHenchNature.ifPresent(hench::setNature);
+                    isHenchGender.ifPresent(hench::setGender);
 
-                user.addHench(hench);
-            } catch (Exception e) {
-                log.warn("Error while parsing hench, {}", e.getMessage());
+                    user.addHench(hench);
+                } catch (Exception e) {
+                    log.warn("Error while parsing hench, {}", e.getMessage());
+                }
             }
         }
 
         // Item
-        if(pageToParse.is(".items")) {
-            for(Element itemToParse : pageToParse.expectFirst(".items").children()) {
+        if(!userFile.getElementsByClass("items").isEmpty()) {
+            for(Element itemToParse : userFile.expectFirst(".items").children()) {
                 try {
                     UserItem item = new UserItem();
                     item.setUser(user);
                     item.setQuantity(Integer.valueOf(itemToParse.expectFirst(".img .number").text().replace("x", "")));
-                    // TODO: Change findByName with a findById using img id, once the item scraper is done
-                    Optional<Item> isItem = this.daoManager.getItemDao().findByName(itemToParse.expectFirst(".info h2").text());
-                    isItem.ifPresent(item::setItem);
+
+                    String itemImageUrl = itemToParse.expectFirst(".img img").attr("src");
+                    String itemId = itemImageUrl.substring(10, itemImageUrl.length() - 4);
+                    String itemName = itemToParse.expectFirst(".info h2").text();
+
+                    if(!itemId.equals("defaut")) {
+                        Optional<Item> isItem = this.daoManager.getItemDao().findById(Integer.valueOf(itemId));
+                        isItem.ifPresentOrElse(item::setItem, () -> {
+                            Item a = new Item();
+                            a.setId(Integer.valueOf(itemId));
+                            a.setName(itemName);
+                            item.setItem(a);
+                        });
+                    }
 
                     user.addItem(item);
                 } catch (Exception e) {
@@ -105,15 +121,23 @@ public class UserProfileParser extends AbstractParser {
                 log.warn("Error while saving guild, {}", e.getMessage());
             }
         }
-        this.getDaoManager().getUserHenchDao().deleteAll();
-        this.getDaoManager().getUserItemDao().deleteAll();
+        this.getDaoManager().getUserDao().save(user);
+
+        this.getDaoManager().getUserHenchDao().deleteByUserId(user.getId());
+        this.getDaoManager().getUserItemDao().deleteByUserId(user.getId());
 
         if(this.getUser().getHenchs() != null) {
-            this.getDaoManager().getUserHenchDao().saveAll(this.getUser().getHenchs());
+            this.getDaoManager().getUserHenchDao().saveAll(user.getHenchs());
         }
         if(this.getUser().getItems() != null) {
-            this.getDaoManager().getUserItemDao().saveAll(this.getUser().getItems());
+            List<Item> items = user.getItems().stream().map(x -> {
+                if(x.getItem() != null) {
+                    return x.getItem();
+                }
+                return null;
+            }).filter(Objects::nonNull).toList();
+            this.getDaoManager().getItemDao().saveAll(items);
+            this.getDaoManager().getUserItemDao().saveAll(user.getItems());
         }
-        this.getDaoManager().getUserDao().save(this.getUser());
     }
 }
