@@ -4,7 +4,7 @@ spring:
     hikari:
       connectionTimeout: 20000
       maximumPoolSize: 5
-    url: jdbc:mysql://127.0.0.1:33061/mixmaster?serverTimezone=UTC
+    url: jdbc:mysql://mixmaster-db:3306/mixmaster?serverTimezone=UTC
     username: mixmaster
     password: mixmaster
   jpa:
