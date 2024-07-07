@@ -27,6 +27,7 @@ public class HenchMix {
     @ManyToOne
     @JoinColumn(name = "item_left_id")
     @JsonProperty(value = "item_left")
+    @JsonIgnoreProperties({"lootZoneAndHench"})
     private Item itemLeft;
 
     @ManyToOne
@@ -38,6 +39,7 @@ public class HenchMix {
     @ManyToOne
     @JoinColumn(name = "item_right_id")
     @JsonProperty(value = "item_right")
+    @JsonIgnoreProperties({"lootZoneAndHench"})
     private Item itemRight;
 
     @ManyToOne

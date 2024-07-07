@@ -51,4 +51,5 @@ jobs:
             cd ${{ vars.DEPLOY_SSH_WORKDIR }}
             export CR_PAT=${{ secrets.GHCR_TOKEN }}
             echo $CR_PAT | docker login ${{ vars.DOCKER_REGISTRY }} -u ${{ secrets.GHCR_USERNAME }} --password-stdin
+            docker compose -f ./docker/docker-compose.yml down
             docker compose -f ./docker/docker-compose.yml up -d --force-recreate
